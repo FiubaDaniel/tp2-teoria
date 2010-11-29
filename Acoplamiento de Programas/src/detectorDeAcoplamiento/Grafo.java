@@ -24,7 +24,7 @@ public class Grafo {
 	int tiempo = 0;
 
 	/*
-	 * La aplicación debe recibir como parámetro la ruta a un directorio donde se encontrán los archivos a procesar,
+	 * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
 	 * o sea los archivos correspondientes a cada una de las clases.
 	 */
 
