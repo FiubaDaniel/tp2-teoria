@@ -3,6 +3,8 @@ package detectorDeAcoplamiento;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -20,7 +22,7 @@ public class Grafo {
 	private Hashtable<String, Integer> Clase;
 
 	private int cantidadaDeBloques;
-	
+
 	int tiempo = 0;
 
 	/**
@@ -36,6 +38,28 @@ public class Grafo {
 
 		File CarpetaClases = new File(ruta);
 		File listaDeClases[]= CarpetaClases.listFiles();
+		/*Obtengo todos los paquetes que habrá en el grafo, para crear el vector */
+		for(int j=0;j<listaDeClases.length;j++){
+			File archivoClase = new File(listaDeClases[j].getName());
+			BufferedReader Clase ;
+			try {
+				String Package = "package";
+				String Import = "import";
+				Clase = new BufferedReader( new FileReader( archivoClase ) );
+				boolean paquete = false;
+				String linea;
+				while(!paquete){
+					linea = Clase.readLine();
+					if(!linea.isEmpty()){
+						paquete = true;
+					}
+				}
+				
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		/*Ahora parseo todo los archivo */
 		for(int i=0;i<listaDeClases.length;i++){
 			this.procesarClase(ruta, listaDeClases[i].getName());	
 		}
@@ -69,24 +93,24 @@ public class Grafo {
 			e.printStackTrace();
 		}	
 	}
-	
+
 	public NodoGrafo [] ComponentesDelGrafo(boolean EsInvertido){
 		if(EsInvertido){
 			return this.representacionGrafoTranspuesto;
 		}
 		return this.representacionGrafo;
 	}
-	
+
 	public ArrayList<NodoClases> getListaClasesYBloques(){
 		return this.ListaClasesYBloques;
 	}
-	
+
 	public int getTiempo(){
 		return this.tiempo;
 	}
-	
+
 	public void setTiempo(int tiempo){
 		this.tiempo = tiempo;
 	}
-	
+
 }
