@@ -1,53 +1,88 @@
 package detectorDeAcoplamiento;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Iterator;
+
 
 public class Grafo {
 
+	private NodoGrafo [] representacionGrafo;
+	private NodoGrafo [] representacionGrafoTranspuesto;
+
+	private ArrayList<NodoClases> ListaClasesYBloques;
+
+	private Hashtable<String, Integer> Paquete;
+	private Hashtable<String, Integer> Clase;
+
+	private int cantidadaDeBloques;
+	
+	int tiempo = 0;
+
 	/*
-	 * La aplicación debe recibir como parámetro la ruta a un directorio donde se encontrán los archivos a procesar
+	 * La aplicación debe recibir como parámetro la ruta a un directorio donde se encontrán los archivos a procesar,
+	 * o sea los archivos correspondientes a cada una de las clases.
 	 */
 
 	public Grafo(String ruta){
 
-		//System.out.println(ruta);
-		//String page = "pageRank";
-		File CarpetaPaquetes = new File(ruta);
-		File listaDePaquetes[] = CarpetaPaquetes.listFiles(); //Aca tengo los paquetes
-		File listaDeClases[];
-		for(int i=0;i<listaDePaquetes.length;i++){
-			String nombrePaquete = listaDePaquetes[i].getName();
-			File CarpetaClasesDePaqueteX = new File(ruta+"/"+nombrePaquete);
-			listaDeClases = CarpetaClasesDePaqueteX.listFiles(); //Aca tengo las clases de un Paquete
-			for(int j = 0; j<listaDeClases.length;i++){
-				String nombreClase = listaDeClases[i].getName();
-				procesarClase(ruta,nombrePaquete,nombreClase);
+		/*Creacion del HashTable key/value*/
+		Paquete = new Hashtable<String, Integer>(); /*Nombre Paquete/Numero Paqute. Identifica el numero de paquete segun su nombre */
+		Clase = new Hashtable<String,Integer>();  /*Nombre Clase/Numero Paqute. Identifica el numero de paquete segun el numero de clase*/
+
+		File CarpetaClases = new File(ruta);
+		File listaDeClases[]= CarpetaClases.listFiles();
+		for(int i=0;i<listaDeClases.length;i++){
+			this.procesarClase(ruta, listaDeClases[i].getName());	
+		}
+		/*Ahora armo el grafo y el grafo invertido*/
+		this.representacionGrafo = new NodoGrafo[this.cantidadaDeBloques];
+		for (int i=0;i<this.cantidadaDeBloques;i++){
+			this.representacionGrafo[i] = new NodoGrafo("cambiar",0);
+		}
+	}
+
+	/*Armo la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende */
+	private void procesarClase(String ruta,String nombreClase) {
+		String Import = "import";
+		String Class = "class";
+		String New = "new";
+		String Package = "package";
+		File archivoClase = new File(ruta+"/"+nombreClase);
+		BufferedReader clase ;
+		try {
+			clase = new BufferedReader( new FileReader( archivoClase ) );
+			String linea;
+			while(clase.ready()){
+				linea = clase.readLine();
+
 			}
-			/*System.out.println("nombre: "+listaDeFiles[i]);
-			System.out.println(listaDeFiles[i].getName());
-			if(page.compareTo((listaDeFiles[i].getName()))==0){
-				String ruta2 = ruta+"/"+listaDeFiles[i].getName();
-				System.out.println("RUTA: "+ruta2);
-				file2 = new File(ruta2);
-			}*/
-			
-			
-		}
-		/*
-		listaDeFiles2 = file2.listFiles();
-		if(listaDeFiles2 != null){
-			System.out.println("Tamaño lista: "+listaDeFiles2.length);
-		}else {
-			System.out.println("OUCH");
-		}
-		for(int i=0;i<listaDeFiles2.length;i++){
-			System.out.println("nombre: "+listaDeFiles2[i]);
-		}*/
+		}catch (IOException e) {
+			e.printStackTrace();
+		}	
 	}
-
-	private void procesarClase(String ruta, String nombrePaquete, String nombreClase) {
-
-		
+	
+	public NodoGrafo [] ComponentesDelGrafo(boolean EsInvertido){
+		if(EsInvertido){
+			return this.representacionGrafoTranspuesto;
+		}
+		return this.representacionGrafo;
 	}
-
+	
+	public ArrayList<NodoClases> getListaClasesYBloques(){
+		return this.ListaClasesYBloques;
+	}
+	
+	public int getTiempo(){
+		return this.tiempo;
+	}
+	
+	public void setTiempo(int tiempo){
+		this.tiempo = tiempo;
+	}
+	
 }
