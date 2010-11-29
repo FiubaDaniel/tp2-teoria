@@ -23,11 +23,11 @@ public class Grafo {
 	
 	int tiempo = 0;
 
-	/*
+	/**
 	 * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
 	 * o sea los archivos correspondientes a cada una de las clases.
+	 * @param ruta ruta de los archivos
 	 */
-
 	public Grafo(String ruta){
 
 		/*Creacion del HashTable key/value*/
@@ -45,8 +45,12 @@ public class Grafo {
 			this.representacionGrafo[i] = new NodoGrafo("cambiar",0);
 		}
 	}
-
-	/*Armo la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende */
+	
+	/**
+	*Se arma la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende 
+	*@param ruta ruta de la clase
+	*@param nombreClase nombre de la clase a procesar
+	*/
 	private void procesarClase(String ruta,String nombreClase) {
 		String Import = "import";
 		String Class = "class";
