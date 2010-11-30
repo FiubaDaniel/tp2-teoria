@@ -1,5 +1,6 @@
 package detectorDeAcoplamiento;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Acoplamiento {
@@ -68,8 +69,15 @@ public class Acoplamiento {
 	public void calcularGrafoReverso(Grafo grafo){
 		int tamanio = this.grafo.getCantidadDeBloques();
 		Grafo grafoReverso = new Grafo(tamanio);
+		NodoGrafo[] nodoReverso = grafoReverso.componentesDelGrafo();
+		NodoGrafo[] nodo = grafo.componentesDelGrafo();
 		for(int i = 0; i < tamanio; i++){
-			NodoGrafo[] representacion = grafo.componentesDelGrafo();
+			ArrayList listaDeAdyacencia = nodo[i].getListaDeAdyacencia();
+			for(int j = 0; j < listaDeAdyacencia.size(); j++){
+				Integer nodoAdyacente = (Integer)listaDeAdyacencia.get(j);
+				ArrayList listaDeAdyacenciaReversa = nodoReverso[j].getListaDeAdyacencia();
+				listaDeAdyacenciaReversa.add(nodoAdyacente);
+			}
 		}
 	}
 	
