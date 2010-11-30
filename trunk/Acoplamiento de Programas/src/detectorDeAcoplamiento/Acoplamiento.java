@@ -19,26 +19,26 @@ public class Acoplamiento {
 		 /* DFS sobre Grafo Transpuesto */
 		 DFS(true);  
 		 /*Le doy los valores de pre/post a grafo comun */
-		 for(int i = 0; i < this.grafo.ComponentesDelGrafo().length;i++){
-			 this.grafo.ComponentesDelGrafo()[i].setPre(this.grafo.ComponentesDelGrafo()[i].getPre());
-			 this.grafo.ComponentesDelGrafo()[i].setPost(this.grafo.ComponentesDelGrafo()[i].getPost());
+		 for(int i = 0; i < this.grafo.componentesDelGrafo().length;i++){
+			 this.grafo.componentesDelGrafo()[i].setPre(this.grafo.componentesDelGrafo()[i].getPre());
+			 this.grafo.componentesDelGrafo()[i].setPost(this.grafo.componentesDelGrafo()[i].getPost());
 		 }
 		 /* Buscar cada uno de los arboles */
 		 
 	}
 	
 	private void DFS(boolean EsInvertido){
-		for(int i = 0;i<this.grafo.ComponentesDelGrafo().length;i++){
-			this.grafo.ComponentesDelGrafo()[i].setDistancia(INFINITO);
-			this.grafo.ComponentesDelGrafo()[i].setPadre(NULL);
+		for(int i = 0;i<this.grafo.componentesDelGrafo().length;i++){
+			this.grafo.componentesDelGrafo()[i].setDistancia(INFINITO);
+			this.grafo.componentesDelGrafo()[i].setPadre(NULL);
 		}
 		this.grafo.setTiempo(0);
-		for(int j = 0; j < this.grafo.ComponentesDelGrafo().length; j++){
+		for(int j = 0; j < this.grafo.componentesDelGrafo().length; j++){
 			Iterator<NodoClases> it = this.grafo.getListaClasesYBloques().iterator();
 			while(it.hasNext()){
 				NodoClases nodo = it.next();
-				if(!this.grafo.ComponentesDelGrafo()[nodo.getIdPaqueteInterno()].isVisitado()){
-					DFSVisitar(this.grafo.ComponentesDelGrafo()[nodo.getIdPaqueteInterno()],EsInvertido);
+				if(!this.grafo.componentesDelGrafo()[nodo.getIdPaqueteInterno()].isVisitado()){
+					DFSVisitar(this.grafo.componentesDelGrafo()[nodo.getIdPaqueteInterno()],EsInvertido);
 				}
 			}
 		}
@@ -51,9 +51,9 @@ public class Acoplamiento {
         Iterator<NodoClases> it = this.grafo.getListaClasesYBloques().iterator();
 		while(it.hasNext()){
 			NodoClases nodo = it.next();
-			if(!this.grafo.ComponentesDelGrafo()[nodo.getIdPaqueteInterno()].isVisitado()){
-				this.grafo.ComponentesDelGrafo()[nodo.getIdPaqueteInterno()].setPadre(nodo.getIdPaqueteInterno());
-	            DFSVisitar(this.grafo.ComponentesDelGrafo()[nodo.getIdPaqueteInterno()],EsInvertido);
+			if(!this.grafo.componentesDelGrafo()[nodo.getIdPaqueteInterno()].isVisitado()){
+				this.grafo.componentesDelGrafo()[nodo.getIdPaqueteInterno()].setPadre(nodo.getIdPaqueteInterno());
+	            DFSVisitar(this.grafo.componentesDelGrafo()[nodo.getIdPaqueteInterno()],EsInvertido);
 			}
 		}
 		n.setTerminado(TERMINADO);
@@ -69,7 +69,7 @@ public class Acoplamiento {
 		int tamanio = this.grafo.getCantidadDeBloques();
 		Grafo grafoReverso = new Grafo(tamanio);
 		for(int i = 0; i < tamanio; i++){
-			NodoGrafo[] representacion = grafo.ComponentesDelGrafo();
+			NodoGrafo[] representacion = grafo.componentesDelGrafo();
 		}
 	}
 	
