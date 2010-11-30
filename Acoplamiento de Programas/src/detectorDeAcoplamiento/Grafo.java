@@ -20,7 +20,7 @@ public class Grafo {
 	private Hashtable<String, Integer> Paquete;
 	private Hashtable<String, Integer> Clase;
 
-	private int cantidadaDeBloques;
+	private int cantidadDeBloques;
 
 	int tiempo = 0;
 
@@ -60,8 +60,8 @@ public class Grafo {
 			this.procesarClase(ruta, listaDeClases[i].getName());	
 		}
 		/*Ahora armo el grafo y el grafo invertido*/
-		this.representacionGrafo = new NodoGrafo[this.cantidadaDeBloques];
-		for (int i=0;i<this.cantidadaDeBloques;i++){
+		this.representacionGrafo = new NodoGrafo[this.cantidadDeBloques];
+		for (int i=0;i<this.cantidadDeBloques;i++){
 			this.representacionGrafo[i] = new NodoGrafo("cambiar",0);
 		}
 	}
@@ -98,6 +98,16 @@ public class Grafo {
 		}
 	}
 	/**
+	 * Constructor que me genera un Grafo con un tamanio especifico
+	 * @param tamanio 
+	 */
+	public Grafo(int tamanio){
+		this.representacionGrafo = new NodoGrafo[tamanio];
+		for(int i = 0; i < tamanio; i++)
+			this.representacionGrafo [i] = new NodoGrafo("unNombre", 0);
+	}
+	
+	/**
 	*Se arma la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende 
 	*@param ruta ruta de la clase
 	*@param nombreClase nombre de la clase a procesar
@@ -121,7 +131,7 @@ public class Grafo {
 		}	
 	}
 
-	public NodoGrafo [] ComponentesDelGrafo(){
+	public NodoGrafo [] componentesDelGrafo(){
 		return this.representacionGrafo;
 	}
 
@@ -135,6 +145,10 @@ public class Grafo {
 
 	public void setTiempo(int tiempo){
 		this.tiempo = tiempo;
+	}
+
+	public int getCantidadDeBloques() {
+		return cantidadDeBloques;
 	}
 
 }
