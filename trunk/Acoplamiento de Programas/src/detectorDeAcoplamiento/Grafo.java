@@ -121,7 +121,7 @@ public class Grafo {
 		}	
 	}
 
-	public NodoGrafo [] ComponentesDelGrafo(boolean EsInvertido){
+	public NodoGrafo [] ComponentesDelGrafo(){
 		return this.representacionGrafo;
 	}
 
