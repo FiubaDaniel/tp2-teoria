@@ -62,26 +62,5 @@ public class Acoplamiento {
 	    n.setPost(this.grafo.getTiempo());
 	}
 	
-	/**
-	 * Calcula, dado un grafo, su reverso.
-	 * @param grafo
-	 */
-	public void calcularGrafoReverso(Grafo grafo){
-		int tamanio = this.grafo.getCantidadDePaquetes();
-		Grafo grafoReverso = new Grafo(tamanio);
-		NodoGrafo[] nodoReverso = grafoReverso.componentesDelGrafo();
-		NodoGrafo[] nodo = grafo.componentesDelGrafo();
-		for(int i = 0; i < tamanio; i++){
-			ArrayList listaDeAdyacencia = nodo[i].getListaDeAdyacencia();
-			for(int j = 0; j < listaDeAdyacencia.size(); j++){
-				Integer nodoAdyacente = (Integer)listaDeAdyacencia.get(j);
-				ArrayList listaDeAdyacenciaReversa = nodoReverso[j].getListaDeAdyacencia();
-				listaDeAdyacenciaReversa.add(nodoAdyacente);
-			}
-		}
-	}
-	
-	private void darVueltaGrafo(Grafo grafo){
-		
-	}
 }
+
