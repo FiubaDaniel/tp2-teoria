@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Hashtable;
-
+import java.util.Iterator;
 
 public class Grafo {
 
@@ -44,6 +44,7 @@ public class Grafo {
 	 * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
 	 * o sea los archivos correspondientes a cada una de las clases.
 	 * ruta de los archivos
+	 * @throws IOException 
 	 */
 	public Grafo(String ruta){
 
@@ -75,43 +76,128 @@ public class Grafo {
 					/* Primero obtengo paquete de la clase que examino*/
 					lineaEnProceso = Clase.readLine();
 					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
-					if(encontrado){
-						if(this.Paquete.get(nombrePaqueteActual)==null){
-							this.Paquete.put(nombrePaqueteActual, this.cantidadDePaquetes);
-							this.cantidadDePaquetes++;
-						}
-					}
+					agregarPaquete(encontrado);
 				}
 				encontrado = false;
 				this.setEsClass(false);
 				while(Clase.ready() && !encontrado){
 					lineaEnProceso = Clase.readLine();
 					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
-					if(encontrado && !esClass){
-						if(this.Paquete.get(nombrePaquete)==null){
-							this.Paquete.put(nombrePaquete, this.cantidadDePaquetes);
-							this.cantidadDePaquetes++;
-						}
-						if(this.Clase.get(nombreClase)==null){
-							int numero = this.Paquete.get(nombrePaquete);
-							this.Clase.put(nombreClase, numero);
-							this.setNombreClase("");
-						}
-						encontrado = false;
-					}else if(esClass && encontrado){/*Tengo el nombre de la clase*/
-						int numero = this.Paquete.get(nombrePaqueteActual);
-						this.Clase.put(nombreClase, numero);
-						this.setEsClass(false);
-					}
+					encontrado = agregarClaseOImport(encontrado);
 				}
-
+				Clase.close();
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		/*Ahora creo el grafo usando los datos recolectados mas el parseo total de los archivos */
+		this.representacionGrafo = new NodoGrafo[this.cantidadDePaquetes];
+		for(int j=0;j<listaDeClases.length;j++){
+			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
+			BufferedReader Clase ;
+			try {
+				Clase = new BufferedReader( new FileReader( archivoClase ) );
+				this.nombreClase = "";
+				String lineaEnProceso;
+				boolean encontrado = false;
+				/*
+				 * Primero setea los valores del nodo y los paquetes de la lista de adyacencia.
+				 * 1-Creo nodo con numero de paquete (obtengo de hastable) y nombre de paquete (obtengo del archivo)
+				 */
+				while(Clase.ready() && !encontrado){
+					this.nombreClase = "";
+					lineaEnProceso = Clase.readLine();
+					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
+					this.agregarNodoAlGrafo(encontrado);
+				}
+				encontrado = false;
+				/*Ahora vienen los import, pq lo que me determinan la lista de adyacencia.*/
+				this.setEsClass(false);
+				while(Clase.ready() && !encontrado){
+					this.nombreClase = "";
+					lineaEnProceso = Clase.readLine();
+					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
+					encontrado = agregarElementoAListaDeAdyacencia(encontrado);
+				}
+				encontrado = false;
+				while(Clase.ready()){
+					this.nombreClase = "";
+					lineaEnProceso = Clase.readLine();
+					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroNew, New, nombrePaquete, nombreClase, esClass);
+					agregarPeso(encontrado);
+				}
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
+	private void agregarPeso(boolean encontrado) {
+		if(encontrado){
+			int paqueteReferenciado = this.Clase.get(nombreClase);
+			int paqueteActual = this.Paquete.get(nombrePaqueteActual);
+			Iterator<NodoListaDeAdyacencia> it = this.representacionGrafo[paqueteActual].getListaDeAdyacencia().iterator();
+			boolean encontrado2 = false;
+			while(it.hasNext() && !encontrado2){
+				NodoListaDeAdyacencia nodo = it.next();
+				if(nodo.getNumeroPaquete() == paqueteReferenciado){
+					encontrado2 = true;
+					nodo.setPeso(nodo.getPeso()+1);
+				}
+			}
+		}
+	}
 
+	private boolean agregarElementoAListaDeAdyacencia(boolean encontrado) {
+		if(encontrado && !esClass){
+			int numeroPaquete = this.Paquete.get(this.nombrePaquete);
+			int numeroPaqueteActual = this.Paquete.get(this.nombrePaqueteActual);
+			NodoListaDeAdyacencia nodo = new NodoListaDeAdyacencia(numeroPaquete,this.nombrePaquete);
+			this.representacionGrafo[numeroPaqueteActual].getListaDeAdyacencia().add(nodo);
+			return false;
+		}else if(esClass && encontrado){			
+			return true;
+		}
+		return false;
+	}
+
+	private void agregarNodoAlGrafo(boolean encontrado) {
+		if(encontrado){
+			int identificadorDePaquete = this.Paquete.get(this.nombrePaqueteActual);
+			NodoGrafo nodo = new NodoGrafo(this.nombrePaqueteActual,identificadorDePaquete);
+			this.representacionGrafo[identificadorDePaquete] = nodo;
+		}	
+	}
+
+	void agregarPaquete(boolean encontrado){
+		if(encontrado){
+			if(this.Paquete.get(nombrePaqueteActual)==null){
+				this.Paquete.put(nombrePaqueteActual, this.cantidadDePaquetes);
+				this.cantidadDePaquetes++;
+			}
+		}
+	}
+
+	boolean agregarClaseOImport(boolean encontrado){
+		if(encontrado && !esClass){
+			if(this.Paquete.get(nombrePaquete)==null){
+				this.Paquete.put(nombrePaquete, this.cantidadDePaquetes);
+				this.cantidadDePaquetes++;
+			}
+			if(this.Clase.get(nombreClase)==null){
+				int numero = this.Paquete.get(nombrePaquete);
+				this.Clase.put(nombreClase, numero);
+				this.setNombreClase("");
+			}
+			return false;
+		}else if(esClass && encontrado){/*Tengo el nombre de la clase*/
+			int numero = this.Paquete.get(nombrePaqueteActual);
+			this.Clase.put(nombreClase, numero);
+			this.setEsClass(false);
+			return true;
+		}
+		return false;
+	}
 
 	/*
 	 * Solo busca el patron sobre un linea (que llega por parametro) no sobre todo el archivo.
@@ -233,7 +319,7 @@ public class Grafo {
 	void setNombrePaquete(String parametro){
 		this.nombrePaquete = parametro;
 	}
-	
+
 	void setEsClass(boolean parametro){
 		this.esClass = parametro;
 	}
@@ -253,7 +339,7 @@ public class Grafo {
 	 *@param ruta ruta de la clase
 	 *@param nombreClase nombre de la clase a procesar
 	 */
-	
+
 	public NodoGrafo [] componentesDelGrafo(){
 		return this.representacionGrafo;
 	}

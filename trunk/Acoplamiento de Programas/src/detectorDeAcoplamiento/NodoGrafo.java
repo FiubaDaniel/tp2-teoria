@@ -7,7 +7,7 @@ public class NodoGrafo {
 	public static final int NULL = -1;
 	private String ID;
 	private int IDinterno;
-	private ArrayList<Integer> listaDeAdyacencia;
+	private ArrayList<NodoListaDeAdyacencia> listaDeAdyacencia;
 	private int Pre,Post;
 	private boolean visitado;
 	private boolean terminado;
@@ -20,7 +20,7 @@ public class NodoGrafo {
 	
 		this.setID(nombrePaquete);
 		this.setIDinterno(identificacionInterna);
-		setListaDeAdyacencia(new ArrayList<Integer>());
+		setListaDeAdyacencia(new ArrayList<NodoListaDeAdyacencia>());
 		this.setVisitado(false);
 		this.setPre(NULL);
 		this.setPost(NULL);
@@ -111,11 +111,11 @@ public class NodoGrafo {
 		return terminado;
 	}
 
-	public void setListaDeAdyacencia(ArrayList<Integer> listaDeAdyacencia) {
-		this.listaDeAdyacencia = listaDeAdyacencia;
+	public void setListaDeAdyacencia(ArrayList<NodoListaDeAdyacencia> arrayList) {
+		this.listaDeAdyacencia = arrayList;
 	}
 
-	public ArrayList<Integer> getListaDeAdyacencia() {
+	public ArrayList<NodoListaDeAdyacencia> getListaDeAdyacencia() {
 		return listaDeAdyacencia;
 	}
 	
