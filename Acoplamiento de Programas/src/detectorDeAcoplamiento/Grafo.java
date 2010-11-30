@@ -6,6 +6,7 @@ import java.io.FileReader;
 
 
 import java.io.IOException;
+import java.text.StringCharacterIterator;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -14,8 +15,6 @@ import java.util.Iterator;
 public class Grafo {
 
 	private NodoGrafo [] representacionGrafo;
-	private NodoGrafo [] representacionGrafoTranspuesto;
-
 	private ArrayList<NodoClases> ListaClasesYBloques;
 
 	private Hashtable<String, Integer> Paquete;
@@ -46,15 +45,12 @@ public class Grafo {
 				String Package = "package";
 				String Import = "import";
 				Clase = new BufferedReader( new FileReader( archivoClase ) );
-				boolean paquete = false;
-				String linea;
-				while(!paquete){
-					linea = Clase.readLine();
-					if(!linea.isEmpty()){
-						paquete = true;
-					}
-				}
-				
+				String linea = " ";
+				eliminarLineasEnBlanco(linea,Clase);
+				String nombre = " ";
+				obtenerNombrePaquete(linea,nombre);
+				StringCharacterIterator iteradorDeLinea = new StringCharacterIterator(linea); 
+				/*En linea tengo la linea de package */
 			}catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -69,7 +65,38 @@ public class Grafo {
 			this.representacionGrafo[i] = new NodoGrafo("cambiar",0);
 		}
 	}
-	
+	@SuppressWarnings("static-access")
+	private void obtenerNombrePaquete(String linea, String nombre) {
+		StringCharacterIterator iteradorDeLinea = new StringCharacterIterator(linea);
+		/*Avanzo en la liena hasta encontrar la e de package */
+		char caracter = iteradorDeLinea.first();
+		while(caracter!= 'e'||caracter != iteradorDeLinea.DONE){
+			caracter = iteradorDeLinea.next();
+		}
+		/*tengo el index en el caracter e*/
+		caracter = iteradorDeLinea.next();/*El siguiente a e*/
+		while(caracter== ' '||caracter != iteradorDeLinea.DONE ){
+			caracter = iteradorDeLinea.next();
+		}
+		char[ ]nombreAux = nombre.toCharArray();
+		nombreAux[0]=caracter;
+		int i = 1;
+		while(caracter != iteradorDeLinea.DONE){
+			nombreAux[i] = iteradorDeLinea.next();
+			i++;
+		}
+		nombre.valueOf(nombreAux);
+	}
+	/*Elimina lineas en blanco y devuelve en linea la primer linea no vacia a procesar */
+	void eliminarLineasEnBlanco(String linea,BufferedReader Clase) throws IOException{
+		boolean paquete = false;
+		while(!paquete){
+			linea = Clase.readLine();
+			if(!linea.isEmpty()){
+				paquete = true;
+			}
+		}
+	}
 	/**
 	*Se arma la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende 
 	*@param ruta ruta de la clase
@@ -95,9 +122,6 @@ public class Grafo {
 	}
 
 	public NodoGrafo [] ComponentesDelGrafo(boolean EsInvertido){
-		if(EsInvertido){
-			return this.representacionGrafoTranspuesto;
-		}
 		return this.representacionGrafo;
 	}
 
