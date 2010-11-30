@@ -131,7 +131,7 @@ public class Grafo {
 		}	
 	}
 
-	public NodoGrafo [] componentesDelGrafo(){
+	public NodoGrafo [] ComponentesDelGrafo(){
 		return this.representacionGrafo;
 	}
 
