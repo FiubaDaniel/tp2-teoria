@@ -27,7 +27,6 @@ public class GrafoReverso {
 		
 		for(int i = 0; i < tamanio; i++){  //reocorro grafo original y obtengo la lista de adyacencia de cada nodo
 			ArrayList listaDeAdyacencia = nodos[i].getListaDeAdyacencia();
-			int id = nodos[i].getIDinterno();
 			
 			if ( !listaDeAdyacencia.isEmpty()){
 				
