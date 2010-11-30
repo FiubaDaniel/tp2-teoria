@@ -67,7 +67,7 @@ public class Acoplamiento {
 	 * @param grafo
 	 */
 	public void calcularGrafoReverso(Grafo grafo){
-		int tamanio = this.grafo.getCantidadDeBloques();
+		int tamanio = this.grafo.getCantidadDePaquetes();
 		Grafo grafoReverso = new Grafo(tamanio);
 		NodoGrafo[] nodoReverso = grafoReverso.componentesDelGrafo();
 		NodoGrafo[] nodo = grafo.componentesDelGrafo();
