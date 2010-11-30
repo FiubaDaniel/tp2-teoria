@@ -13,7 +13,7 @@ public class MainPruebas {
 	public static void main(String[] args) throws IOException{
 		
 		/*ProbarObtenerArchivos prueba1 = new ProbarObtenerArchivos();*/
-		String ruta = "/home/daniel/ZPruebaBorrar";
+		String ruta = "/Users/user/workspace/Prueba";
 		File CarpetaClases = new File(ruta);
 		File listaDeClases[]= CarpetaClases.listFiles();
 		for(int i=0;i<listaDeClases.length;i++){
