@@ -32,9 +32,8 @@ public class GrafoReverso {
 				
 				for(int j = 0; j < listaDeAdyacencia.size(); j++){  //recorro la lista de adyacencia del nodo
 					Integer nodoAdyacente = (Integer)listaDeAdyacencia.get(j);
-					nodoReverso[j].setIDinterno(nodoAdyacente);
-					ArrayList listaDeAdyacenciaReversa = nodoReverso[j].getListaDeAdyacencia();
-					listaDeAdyacenciaReversa.add(id);
+					ArrayList listaDeAdyacenciaReversa = nodoReverso[nodoAdyacente].getListaDeAdyacencia();
+					listaDeAdyacenciaReversa.add(j);
 				}
 			}
 		}
