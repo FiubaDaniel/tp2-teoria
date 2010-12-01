@@ -47,6 +47,13 @@ public class Acoplamiento {
 		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
 			grafoReverso.componentesDelGrafoReverso()[i].setVisitado(NO_VISITADO);
 		}
+		System.out.println("Alumno: Leandro Alessandrello ");
+		System.out.println("Padron: 84155 ");
+		System.out.println("Alumno: Daniel Mugica ");
+		System.out.println("Padron: 87697 ");
+		System.out.println("Cantidad de modulos:  "+this.grafo.getCantidadDePaquetes());
+		System.out.println("Cantidad de Clases: ");
+		
 		while(this.getIndex() < this.listaDePost.size()){
 			NodoGrafo nodo = grafoReverso.componentesDelGrafoReverso()[this.listaDePost.get(index)];
 			if(!nodo.isVisitado()){		

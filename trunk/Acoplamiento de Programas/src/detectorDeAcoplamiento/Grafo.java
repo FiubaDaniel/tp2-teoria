@@ -129,7 +129,7 @@ public class Grafo {
 			}
 		}
 		/****************************SACAR**************************************/
-		System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
+		/*System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
 		System.out.println("Length: "+this.representacionGrafo.length);
 		for(int i =0 ; i<this.representacionGrafo.length;i++){
 			NodoGrafo nodo = this.representacionGrafo[i];
@@ -146,10 +146,10 @@ public class Grafo {
 					System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
 					System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
 					System.out.println("Peso Paquete: "+nodo2.getPeso());
-					System.out.println("/************************/  ");
+					System.out.println(" ");
 				}
 			}
-		}
+		}*/
 	}
 
 	private void agregarPaqueteImport(boolean encontrado) {
@@ -274,31 +274,41 @@ public class Grafo {
 			Character caracter = new Character(iteradorDeLinea.first());
 			if(numeroPatron == numeroImport){
 				this.setNombreClase("");
-				String lineaAuxiliar1="";
-				String lineaAuxiliar2="";
+				String lineaAuxiliar1=""; /*acumula evitando lo q viene despues del ultimo punto */
+				String lineaAuxiliar2=""; /*acumula lo q viene despues del ultimo punto */
 				int cantidadDePuntos = 0;
 				boolean terminado = false;
 				while(caracter != iteradorDeLinea.DONE && !terminado){
-					if(caracter != iteradorDeLinea.DONE && caracter != ';'&& caracter != '.'){
+					if(caracter != iteradorDeLinea.DONE && caracter != ';'&& caracter != '.'){		
 						if(cantidadDePuntos==0){
 							lineaAuxiliar1 = lineaAuxiliar1+caracter;
-						}else if(cantidadDePuntos == 1){
+						}else{
 							lineaAuxiliar2 = lineaAuxiliar2+caracter;
-						}else if(cantidadDePuntos==2){
+						}				
+						/*else if(cantidadDePuntos == 1){
+							lineaAuxiliar2 = lineaAuxiliar2+caracter;
+						}else if(cantidadDePuntos==2 ){
 							this.setNombreClase(this.nombreClase + caracter);
+						}*/
+					}else if( caracter=='.' ){	
+						if(cantidadDePuntos > 0){ /* Es el segundo punto */
+							lineaAuxiliar1 = lineaAuxiliar1+"."+lineaAuxiliar2;
+							lineaAuxiliar2 = "";
 						}
-					}else if( caracter=='.'){	
 						cantidadDePuntos++;
+						
 					}
 					caracter = iteradorDeLinea.next();	
 				}
-				if(cantidadDePuntos==1){
+				this.setNombreClase(lineaAuxiliar2);
+				this.setNombrePaquete(lineaAuxiliar1);
+				/*if(cantidadDePuntos==1){
 					this.setNombreClase(lineaAuxiliar2); /*LineaAxuliar2 es el nombre de la clase y lineaAuxiliar1 el del paquete*/
-					this.setNombrePaquete(lineaAuxiliar1);
+				/*	this.setNombrePaquete(lineaAuxiliar1);
 				}else if(cantidadDePuntos==2){
 					this.setNombrePaquete(lineaAuxiliar1+'.'+lineaAuxiliar2); 
 					/*El paquete es la suma de las dos lineas auxiliares y el nombre de la clase esta en nombreClase*/
-				}
+				//}
 			}else if(numeroPatron == numeroClase){
 				this.setNombreClase("");
 				this.setEsClass(true);
