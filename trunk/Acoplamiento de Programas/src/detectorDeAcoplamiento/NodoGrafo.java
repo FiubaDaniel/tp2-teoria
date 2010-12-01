@@ -8,14 +8,11 @@ public class NodoGrafo {
 	private String ID;
 	private int IDinterno;
 	private ArrayList<NodoListaDeAdyacencia> listaDeAdyacencia;
-	private int Pre,Post;
 	private boolean visitado;
-	private boolean terminado;
-	private int distancia;
+	private int Pre,Post;
 	private int padre;
-	private boolean EnComponenteConexa;
-	private int numeroDeComponenteConexa;
-	
+
+
 	public NodoGrafo(String nombrePaquete,int identificacionInterna){
 	
 		this.setID(nombrePaquete);
@@ -24,43 +21,16 @@ public class NodoGrafo {
 		this.setVisitado(false);
 		this.setPre(NULL);
 		this.setPost(NULL);
-		this.setEnComponenteConexa(false);
-		this.setNumeroDeComponenteConexa(NULL);
-		this.setDistancia(-1);
 		this.padre = NULL;
-		this.terminado = false;
-	}
 
-	public void setDistancia(int distancia) {
-		this.distancia = distancia;
 	}
-
-	public int getDistancia() {
-		return distancia;
-	}
-
+	
 	public void setPadre(int padre) {
 		this.padre = padre;
 	}
 
 	public int getPadre() {
 		return padre;
-	}
-
-	public void setEnComponenteConexa(boolean enComponenteConexa) {
-		EnComponenteConexa = enComponenteConexa;
-	}
-
-	public boolean isEnComponenteConexa() {
-		return EnComponenteConexa;
-	}
-
-	public void setNumeroDeComponenteConexa(int numeroDeComponenteConexa) {
-		this.numeroDeComponenteConexa = numeroDeComponenteConexa;
-	}
-
-	public int getNumeroDeComponenteConexa() {
-		return numeroDeComponenteConexa;
 	}
 
 	public void setVisitado(boolean visitado) {
@@ -103,14 +73,6 @@ public class NodoGrafo {
 		return ID;
 	}
 
-	public void setTerminado(boolean terminado) {
-		this.terminado = terminado;
-	}
-
-	public boolean isTerminado() {
-		return terminado;
-	}
-
 	public void setListaDeAdyacencia(ArrayList<NodoListaDeAdyacencia> arrayList) {
 		this.listaDeAdyacencia = arrayList;
 	}
@@ -118,7 +80,5 @@ public class NodoGrafo {
 	public ArrayList<NodoListaDeAdyacencia> getListaDeAdyacencia() {
 		return listaDeAdyacencia;
 	}
-	
-	
-	
+
 }
