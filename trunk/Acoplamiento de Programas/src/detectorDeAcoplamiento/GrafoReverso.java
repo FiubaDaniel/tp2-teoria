@@ -1,6 +1,5 @@
 package detectorDeAcoplamiento;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 
 import detectorDeAcoplamiento.Grafo;
@@ -59,8 +58,12 @@ public class GrafoReverso {
 		}
 	}
 
-	private NodoGrafo[] getNodos() {
+	public NodoGrafo[] getNodos() {
 		return nodos;
+	}
+	
+	public int getCantidadDePaquetes(){
+		return this.cantidadDePaquetes;
 	}
 	
 }

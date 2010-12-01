@@ -60,6 +60,7 @@ public class Grafo {
 		 * Ademas se obtiene la cantidad de paquetes existentes que permite crear el vector que representara al
 		 * grafo.
 		 */
+		System.out.println("Cantidad de Files :"+listaDeClases.length);
 		for(int j=0;j<listaDeClases.length;j++){
 			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
 			BufferedReader Clase ;
@@ -92,6 +93,7 @@ public class Grafo {
 		/*Ahora creo el grafo usando los datos recolectados mas el parseo total de los archivos */
 		this.representacionGrafo = new NodoGrafo[this.cantidadDePaquetes];
 		for(int j=0;j<listaDeClases.length;j++){
+			/*sacar*/ String rutAux = ruta+"/"+listaDeClases[j].getName();
 			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
 			BufferedReader Clase ;
 			try {
@@ -138,7 +140,7 @@ public class Grafo {
 			System.out.println("Numero Paquete :"+ nodo.getIDinterno());
 			if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
 				System.out.println("Lista de adyacencia Vacia");
-				System.out.println("/**************************/  ");
+				System.out.println("/----------------------------/  ");
 			}else{
 				System.out.println("Lista de adyacencia: ");
 				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
@@ -154,7 +156,7 @@ public class Grafo {
 	}
 
 	private void agregarPaqueteImport(boolean encontrado) {
-		if(encontrado&& !esClass){
+		if(encontrado && !esClass){
 			int numeroPaquete = this.Paquete.get(this.nombrePaquete);
 			if(this.representacionGrafo[numeroPaquete] == null){
 				NodoGrafo nodo = new NodoGrafo(this.nombrePaquete,numeroPaquete);
@@ -274,6 +276,7 @@ public class Grafo {
 			StringCharacterIterator iteradorDeLinea = new StringCharacterIterator (aux);
 			Character caracter = new Character(iteradorDeLinea.first());
 			if(numeroPatron == numeroImport){
+				this.setNombreClase("");
 				String lineaAuxiliar1="";
 				String lineaAuxiliar2="";
 				int cantidadDePuntos = 0;
@@ -285,7 +288,7 @@ public class Grafo {
 						}else if(cantidadDePuntos == 1){
 							lineaAuxiliar2 = lineaAuxiliar2+caracter;
 						}else if(cantidadDePuntos==2){
-							this.setNombreClase(nombreClase = nombreClase + caracter);
+							this.setNombreClase(this.nombreClase + caracter);
 						}
 					}else if( caracter=='.'){	
 						cantidadDePuntos++;
@@ -300,13 +303,14 @@ public class Grafo {
 					/*El paquete es la suma de las dos lineas auxiliares y el nombre de la clase esta en nombreClase*/
 				}
 			}else if(numeroPatron == numeroClase){
+				this.setNombreClase("");
 				this.setEsClass(true);
 				boolean terminado = false;
 				while(caracter != iteradorDeLinea.DONE && !terminado){
 					if(caracter == '{' || caracter == ' ' || caracter == iteradorDeLinea.DONE){
 						terminado = true;
 					}else{
-						this.setNombreClase(nombreClase = nombreClase + caracter);
+						this.setNombreClase(this.nombreClase+ caracter);
 					}
 					caracter = iteradorDeLinea.next();
 				}
@@ -322,7 +326,7 @@ public class Grafo {
 			}else if(numeroPatron == numeroNew){
 				boolean terminado = false;
 				while(caracter != iteradorDeLinea.DONE && !terminado){
-					if(caracter == ' ' || caracter == '(' || caracter == iteradorDeLinea.DONE){
+					if(caracter == ' ' || caracter == '(' || caracter == '<' || caracter == '[' || caracter == iteradorDeLinea.DONE){
 						terminado = true;
 					}else{
 						this.setNombreClase(this.nombreClase + caracter);
