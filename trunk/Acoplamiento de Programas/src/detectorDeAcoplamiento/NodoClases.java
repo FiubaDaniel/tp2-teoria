@@ -1,5 +1,9 @@
 package detectorDeAcoplamiento;
 
+
+/***********************************************************************************************/
+/*Esta clase no va habria q eliminarla */
+/***********************************************************************************************/
 import java.util.ArrayList;
 
 public class NodoClases {
