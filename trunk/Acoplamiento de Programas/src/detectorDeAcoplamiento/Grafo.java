@@ -44,7 +44,6 @@ public class Grafo {
 	 * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
 	 * o sea los archivos correspondientes a cada una de las clases.
 	 * ruta de los archivos
-	 * @throws IOException 
 	 */
 	public Grafo(String ruta){
 
@@ -117,6 +116,7 @@ public class Grafo {
 					this.nombreClase = "";
 					lineaEnProceso = Clase.readLine();
 					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
+					agregarPaqueteImport(encontrado); /*Esto me garantiza agregar los paquetes q son de java, los cuales sus listas sera vacias */
 					encontrado = agregarElementoAListaDeAdyacencia(encontrado);
 				}
 				encontrado = false;
@@ -130,6 +130,37 @@ public class Grafo {
 				e.printStackTrace();
 			}
 		}
+		System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
+		System.out.println("Length: "+this.representacionGrafo.length);
+		for(int i =0 ; i<this.representacionGrafo.length;i++){
+			NodoGrafo nodo = this.representacionGrafo[i];
+			System.out.println("Nombre Paquete :"+ nodo.getID());
+			System.out.println("Numero Paquete :"+ nodo.getIDinterno());
+			if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
+				System.out.println("Lista de adyacencia Vacia");
+				System.out.println("/**************************/  ");
+			}else{
+				System.out.println("Lista de adyacencia: ");
+				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
+				while(it.hasNext()){
+					NodoListaDeAdyacencia nodo2 = it.next();
+					System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
+					System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
+					System.out.println("Peso Paquete: "+nodo2.getPeso());
+					System.out.println("/************************/  ");
+				}
+			}
+		}
+	}
+
+	private void agregarPaqueteImport(boolean encontrado) {
+		if(encontrado&& !esClass){
+			int numeroPaquete = this.Paquete.get(this.nombrePaquete);
+			if(this.representacionGrafo[numeroPaquete] == null){
+				NodoGrafo nodo = new NodoGrafo(this.nombrePaquete,numeroPaquete);
+				this.representacionGrafo[numeroPaquete] = nodo;
+			}
+		}	
 	}
 
 	private void agregarPeso(boolean encontrado) {
@@ -152,8 +183,18 @@ public class Grafo {
 		if(encontrado && !esClass){
 			int numeroPaquete = this.Paquete.get(this.nombrePaquete);
 			int numeroPaqueteActual = this.Paquete.get(this.nombrePaqueteActual);
-			NodoListaDeAdyacencia nodo = new NodoListaDeAdyacencia(numeroPaquete,this.nombrePaquete);
-			this.representacionGrafo[numeroPaqueteActual].getListaDeAdyacencia().add(nodo);
+			Iterator<NodoListaDeAdyacencia> it = this.representacionGrafo[numeroPaqueteActual].getListaDeAdyacencia().iterator();
+			boolean encontro = false;
+			while(it.hasNext() && !encontro){
+				NodoListaDeAdyacencia nodo = it.next();
+				if(nodo.getNumeroPaquete()==numeroPaquete){
+					encontro = true;
+				}
+			}
+			if(!encontro){
+				NodoListaDeAdyacencia nodo = new NodoListaDeAdyacencia(numeroPaquete,this.nombrePaquete);
+				this.representacionGrafo[numeroPaqueteActual].getListaDeAdyacencia().add(nodo);
+			}
 			return false;
 		}else if(esClass && encontrado){			
 			return true;
@@ -164,9 +205,11 @@ public class Grafo {
 	private void agregarNodoAlGrafo(boolean encontrado) {
 		if(encontrado){
 			int identificadorDePaquete = this.Paquete.get(this.nombrePaqueteActual);
-			NodoGrafo nodo = new NodoGrafo(this.nombrePaqueteActual,identificadorDePaquete);
-			this.representacionGrafo[identificadorDePaquete] = nodo;
-		}	
+			if(this.representacionGrafo[identificadorDePaquete] == null){
+				NodoGrafo nodo = new NodoGrafo(this.nombrePaqueteActual,identificadorDePaquete);
+				this.representacionGrafo[identificadorDePaquete] = nodo;
+			}	
+		}
 	}
 
 	void agregarPaquete(boolean encontrado){
@@ -282,7 +325,7 @@ public class Grafo {
 					if(caracter == ' ' || caracter == '(' || caracter == iteradorDeLinea.DONE){
 						terminado = true;
 					}else{
-						this.setNombreClase(nombreClase + caracter);
+						this.setNombreClase(this.nombreClase + caracter);
 					}
 					caracter = iteradorDeLinea.next();
 				}
