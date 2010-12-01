@@ -6,10 +6,8 @@ import java.util.LinkedList;
 
 public class Acoplamiento {
 
-	//private static final int INFINITO = -1;
 	private static final boolean NO_VISITADO = false;
 	private static final boolean VISITADO = true;
-	//private static final boolean TERMINADO = true;
 	private static final int NULL = -1;
 
 	private Grafo grafo;
@@ -24,7 +22,7 @@ public class Acoplamiento {
 		this.ComponenteConexa = new ArrayList<NodoComponenteConexa>();
 		this.Componente = 'A';
 	}
-	/*TERMINAR*/
+
 	/*Utilizo busqueda en profundidad que se encuentra en el libro */
 	public void CalcularComponentesConexas(){
 		GrafoReverso grafoReverso = new GrafoReverso(this.grafo.getCantidadDePaquetes());
@@ -37,9 +35,7 @@ public class Acoplamiento {
 			grafoReverso.componentesDelGrafoReverso()[i].setPost(this.grafo.componentesDelGrafo()[i].getPost());
 			grafoReverso.componentesDelGrafoReverso()[i].setPadre(this.grafo.componentesDelGrafo()[i].getPadre());
 		}
-		/*Ahora calculo las componentes conexas mostrando por pantalla el tamaño y el circuito*/
-
-		/*
+		/* Ahora calculo las componentes conexas mostrando por pantalla el tamaño y el circuito
 		 * La idea seria agarra el primer elemento de la lista, encontrar la componente conexa y despues eliminar la cantidad
 		 * de elementos de la componente de la lista.
 		 */

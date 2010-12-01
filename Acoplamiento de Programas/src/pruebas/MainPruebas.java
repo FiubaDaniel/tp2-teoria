@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.StringCharacterIterator;
 
+import detectorDeAcoplamiento.Acoplamiento;
 import detectorDeAcoplamiento.Grafo;
 
 public class MainPruebas {
@@ -15,6 +16,8 @@ public class MainPruebas {
 		
 		String ruta = "/home/daniel/ZPruebaBorrar";
 		Grafo grafo = new Grafo(ruta);
+		Acoplamiento acoplamiento = new Acoplamiento(grafo);
+		acoplamiento.CalcularComponentesConexas();
 	}
 
 		/*Implementar Una ventana de busqueda de patrones*/
