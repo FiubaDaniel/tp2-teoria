@@ -15,12 +15,9 @@ public class Grafo {
 
 	private NodoGrafo [] representacionGrafo;
 	private ArrayList<NodoClases> ListaClasesYBloques;
-
 	private Hashtable<String, Integer> Paquete;
 	private Hashtable<String, Integer> Clase;
-
 	private int cantidadDePaquetes;
-
 	int tiempo = 0;
 
 	/* Constantes necesarias para el parseo del los archivos */
@@ -93,7 +90,6 @@ public class Grafo {
 		/*Ahora creo el grafo usando los datos recolectados mas el parseo total de los archivos */
 		this.representacionGrafo = new NodoGrafo[this.cantidadDePaquetes];
 		for(int j=0;j<listaDeClases.length;j++){
-			/*sacar*/ String rutAux = ruta+"/"+listaDeClases[j].getName();
 			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
 			BufferedReader Clase ;
 			try {
@@ -132,6 +128,7 @@ public class Grafo {
 				e.printStackTrace();
 			}
 		}
+		/****************************SACAR**************************************/
 		System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
 		System.out.println("Length: "+this.representacionGrafo.length);
 		for(int i =0 ; i<this.representacionGrafo.length;i++){
@@ -370,22 +367,6 @@ public class Grafo {
 	void setEsClass(boolean parametro){
 		this.esClass = parametro;
 	}
-
-	/**
-	 * Constructor que me genera un Grafo con un tamanio especifico
-	 * @param tamanio 
-	 */
-	public Grafo(int tamanio){
-		this.representacionGrafo = new NodoGrafo[tamanio];
-		for(int i = 0; i < tamanio; i++)
-			this.representacionGrafo [i] = new NodoGrafo("unNombre", 0);
-	}
-
-	/**
-	 *Se arma la lista de clases, donde tengo la informacion de a que paquete pertenece y las clases de las q depende 
-	 *@param ruta ruta de la clase
-	 *@param nombreClase nombre de la clase a procesar
-	 */
 
 	public NodoGrafo [] componentesDelGrafo(){
 		return this.representacionGrafo;
