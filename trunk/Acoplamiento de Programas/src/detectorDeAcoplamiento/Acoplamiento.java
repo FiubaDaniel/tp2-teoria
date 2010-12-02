@@ -78,6 +78,8 @@ public class Acoplamiento {
 				}
 			}
 		}
+		System.out.println("Termino Grafoooooooooo");
+		System.out.println("");
 	}
 	private void DFS_GrafoInversoVisitar(GrafoReverso grafoReverso,	NodoGrafo nodo,int peso) {		
 		nodo.setVisitado(VISITADO);
