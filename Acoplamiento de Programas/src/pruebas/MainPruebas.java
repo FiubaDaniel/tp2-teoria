@@ -14,7 +14,7 @@ public class MainPruebas {
 
 	public static void main(String[] args) throws IOException{
 		
-		String ruta = "/home/daniel/ZPruebaBorrar";
+		String ruta = "/home/daniel/ZPrueba5Borrar";
 		Grafo grafo = new Grafo(ruta);
 		Acoplamiento acoplamiento = new Acoplamiento(grafo);
 		acoplamiento.CalcularComponentesConexas();

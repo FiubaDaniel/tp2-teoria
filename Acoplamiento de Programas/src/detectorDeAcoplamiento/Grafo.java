@@ -36,7 +36,12 @@ public class Grafo {
 	private String nombreClase;
 	private boolean esClass;
 
-
+	/**
+	 * Sacar es para buscar errores
+	 */
+	/**********************************/
+	private String ClaseEnLaQestoy;
+	/**********************************/
 	/**
 	 * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
 	 * o sea los archivos correspondientes a cada una de las clases.
@@ -168,12 +173,13 @@ public class Grafo {
 			int paqueteActual = this.Paquete.get(nombrePaqueteActual);
 			Iterator<NodoListaDeAdyacencia> it = this.representacionGrafo[paqueteActual].getListaDeAdyacencia().iterator();
 			boolean encontrado2 = false;
-			while(it.hasNext() && !encontrado2){
+			while(it.hasNext() && !encontrado2){			
 				NodoListaDeAdyacencia nodo = it.next();
 				if(nodo.getNumeroPaquete() == paqueteReferenciado){
 					encontrado2 = true;
 					nodo.setPeso(nodo.getPeso()+1);
 				}
+
 			}
 		}
 	}
@@ -253,17 +259,25 @@ public class Grafo {
 		boolean encontrePatron = false;
 		int inicial = 0;
 		int finall = patron.length();
+		int finallTrhow = 5;
 		/*Se supone error igual 0, si ocurre un erro se modificará, sino no*/
 		this.setEsClass(false);
 		/*Busca el patron en la linea */
 		if(!lineaLeida.isEmpty()){
 			while(!encontrePatron && finall < lineaLeida.length()){
 				ventana = lineaLeida.substring(inicial, finall);
+				if(finallTrhow < lineaLeida.length()){
+					String detectarThrow = lineaLeida.substring(inicial, finallTrhow);
+					if(detectarThrow.compareTo("throw")==0){
+						return false;
+					}
+				}
 				if(ventana.compareTo(patron)==0){
 					encontrePatron = true;
 				}else{
 					inicial++;
 					finall++;
+					finallTrhow++;
 				}
 			}
 		}
@@ -296,7 +310,7 @@ public class Grafo {
 							lineaAuxiliar2 = "";
 						}
 						cantidadDePuntos++;
-						
+
 					}
 					caracter = iteradorDeLinea.next();	
 				}
@@ -321,6 +335,7 @@ public class Grafo {
 					}
 					caracter = iteradorDeLinea.next();
 				}
+				this.setClaseEnLaQestoy(this.nombreClase);
 			}else if( numeroPatron == numeroPackage){
 				String lineaAuxiliar="";
 				while(caracter != iteradorDeLinea.DONE){
@@ -397,4 +412,13 @@ public class Grafo {
 	public int getCantidadDePaquetes(){
 		return this.cantidadDePaquetes;
 	}
+	/********************************Sacar***************************/
+	public void setClaseEnLaQestoy(String claseEnLaQestoy) {
+		ClaseEnLaQestoy = claseEnLaQestoy;
+	}
+
+	public String getClaseEnLaQestoy() {
+		return ClaseEnLaQestoy;
+	}
+	/******************************************************************/
 }
