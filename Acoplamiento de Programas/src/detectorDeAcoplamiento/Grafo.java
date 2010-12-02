@@ -134,7 +134,8 @@ public class Grafo {
 			}
 		}
 		/****************************SACAR**************************************/
-		/*System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
+		System.out.println("Grafooooooooooooooooo");
+		System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
 		System.out.println("Length: "+this.representacionGrafo.length);
 		for(int i =0 ; i<this.representacionGrafo.length;i++){
 			NodoGrafo nodo = this.representacionGrafo[i];
@@ -154,7 +155,7 @@ public class Grafo {
 					System.out.println(" ");
 				}
 			}
-		}*/
+		}
 	}
 
 	private void agregarPaqueteImport(boolean encontrado) {
