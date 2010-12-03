@@ -1,6 +1,8 @@
 package pruebas;
 
 import java.io.IOException;
+import java.util.Calendar;
+
 import detectorDeAcoplamiento.CalculadorAcoplamiento;
 import detectorDeAcoplamiento.Grafo;
 
@@ -34,6 +36,8 @@ public class MainPruebas {
 		grafo = new Grafo(ruta);
 		acoplamiento = new CalculadorAcoplamiento(grafo);
 		acoplamiento.CalcularComponentesConexas();
+		
+		
 	}
 		
 }
