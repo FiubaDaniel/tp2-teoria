@@ -149,7 +149,7 @@ public class Acoplamiento {
 			if(!grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].isVisitado()){
 				this.componentesConexas.clear();			
 				DFS_ComponentesConexasVisitar(grafoReverso,grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()]);
-				System.out.print("Componente: "+this.Componente+"; Tamaño: "+this.componentesConexas.size());
+				System.out.print("Componente: "+this.Componente+"; Tamanio: "+this.componentesConexas.size());
 				System.out.print(";  Sus componentes son: ");
 				for(int j=0 ; j < this.componentesConexas.size() ; j++){
 					System.out.print(this.grafo.componentesDelGrafo()[this.componentesConexas.get(j)].getID()+" ; ");
