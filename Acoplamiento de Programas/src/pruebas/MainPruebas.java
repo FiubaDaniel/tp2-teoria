@@ -9,7 +9,6 @@ public class MainPruebas {
 	public static void main(String[] args) throws IOException{
 		
 		System.out.println("Prueba 1 ");
-		//String ruta = "/home/daniel/Caso1Grafo1Borrar";
 		String ruta = "Prueba1";
 		Grafo grafo = new Grafo(ruta);
 		CalculadorAcoplamiento acoplamiento = new CalculadorAcoplamiento(grafo);
@@ -17,17 +16,24 @@ public class MainPruebas {
 		System.out.println("");
 		System.out.println("");
 		System.out.println("Prueba 2 ");
-		ruta = "Prueba4";
-		//ruta = "/home/daniel/Caso2Grafo2Borrar";
+		ruta = "Prueba3";
 		grafo = new Grafo(ruta);
 		acoplamiento = new CalculadorAcoplamiento(grafo);
 		acoplamiento.CalcularComponentesConexas();
-		/*System.out.println("Prueba 2 ");
-		//ruta = "Prueba2";
-		ruta = "/home/daniel/Caso1Grafo1Borrar";
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Prueba 3 ");
+		ruta = "Prueba4";
 		grafo = new Grafo(ruta);
 		acoplamiento = new CalculadorAcoplamiento(grafo);
-		acoplamiento.CalcularComponentesConexas();*/
+		acoplamiento.CalcularComponentesConexas();
+		System.out.println("");
+		System.out.println("");
+		System.out.println("Prueba 4 ");
+		ruta = "Prueba2";
+		grafo = new Grafo(ruta);
+		acoplamiento = new CalculadorAcoplamiento(grafo);
+		acoplamiento.CalcularComponentesConexas();
 	}
 		
 }
