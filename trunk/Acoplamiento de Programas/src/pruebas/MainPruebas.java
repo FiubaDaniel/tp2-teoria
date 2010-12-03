@@ -10,7 +10,7 @@ public class MainPruebas {
 
 	public static void main(String[] args) throws IOException{
 		
-		System.out.println("Prueba 1 ");
+		System.out.println("Prueba 1 "); 
 		String ruta = "Prueba1";
 		Grafo grafo = new Grafo(ruta);
 		CalculadorAcoplamiento acoplamiento = new CalculadorAcoplamiento(grafo);
