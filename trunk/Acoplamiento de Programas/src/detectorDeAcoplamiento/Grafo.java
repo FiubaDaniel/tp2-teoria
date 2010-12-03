@@ -224,7 +224,7 @@ public class Grafo {
 		}
 	}
 
-	void agregarPaquete(boolean encontrado){
+	private void agregarPaquete(boolean encontrado){
 		if(encontrado){
 			if(this.Paquete.get(nombrePaqueteActual)==null){
 				this.Paquete.put(nombrePaqueteActual, this.cantidadDePaquetes);
@@ -233,7 +233,7 @@ public class Grafo {
 		}
 	}
 
-	boolean agregarClaseOImport(boolean encontrado){
+	private boolean agregarClaseOImport(boolean encontrado){
 		if(encontrado && !esClass){
 			if(this.Paquete.get(nombrePaquete)==null){
 				this.Paquete.put(nombrePaquete, this.cantidadDePaquetes);
