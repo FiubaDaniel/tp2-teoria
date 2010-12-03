@@ -57,7 +57,7 @@ public class GrafoReverso {
 		}
 	}
 
-	public NodoGrafo[] componentesDelGrafoReverso() {
+	public NodoGrafo[] representacionGrafoReverso() {
 		return representacionGrafoReverso;
 	}
 	

@@ -1,11 +1,11 @@
 package detectorDeAcoplamiento;
 
-public class NodoComponenteConexa {
+public class NodoCiclo {
 	
 	private int numeroPaquete;
 	private int peso;
 	
-	public NodoComponenteConexa(int num,int p){
+	public NodoCiclo(int num,int p){
 		this.numeroPaquete = num;
 		this.peso = p;
 	}

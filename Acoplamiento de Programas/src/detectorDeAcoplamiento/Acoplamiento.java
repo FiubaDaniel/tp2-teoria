@@ -12,15 +12,19 @@ public class Acoplamiento {
 
 	private Grafo grafo;
 	private LinkedList<Integer> listaDePost;
-	private int index;
-	private ArrayList<NodoComponenteConexa> ComponenteConexa;
+	private ArrayList<NodoCiclo> Ciclo;
 	private char Componente;
+	private ArrayList<Integer> componentesConexas;
+	private int cantidadDeCiclos;
+
 
 	public Acoplamiento(Grafo grafo){
 		this.grafo = grafo;
 		this.listaDePost = new LinkedList<Integer>();
-		this.ComponenteConexa = new ArrayList<NodoComponenteConexa>();
+		this.Ciclo = new ArrayList<NodoCiclo>();
+		this.componentesConexas = new ArrayList<Integer>();
 		this.Componente = 'A';
+		this.cantidadDeCiclos = 1;
 	}
 
 	/*Utilizo busqueda en profundidad que se encuentra en el libro */
@@ -31,65 +35,152 @@ public class Acoplamiento {
 		DFS_Grafo();
 		/*Le doy los valores de pre/post a grafo reverso */
 		for(int i = 0; i < this.grafo.componentesDelGrafo().length;i++){
-			grafoReverso.componentesDelGrafoReverso()[i].setPre(this.grafo.componentesDelGrafo()[i].getPre());
-			grafoReverso.componentesDelGrafoReverso()[i].setPost(this.grafo.componentesDelGrafo()[i].getPost());
-			grafoReverso.componentesDelGrafoReverso()[i].setPadre(this.grafo.componentesDelGrafo()[i].getPadre());
+			grafoReverso.representacionGrafoReverso()[i].setPre(this.grafo.componentesDelGrafo()[i].getPre());
+			grafoReverso.representacionGrafoReverso()[i].setPost(this.grafo.componentesDelGrafo()[i].getPost());
+			grafoReverso.representacionGrafoReverso()[i].setPadre(this.grafo.componentesDelGrafo()[i].getPadre());
 		}
 		/* Ahora calculo las componentes conexas mostrando por pantalla el tamaño y el circuito
 		 * La idea seria agarra el primer elemento de la lista, encontrar la componente conexa y despues eliminar la cantidad
 		 * de elementos de la componente de la lista.
 		 */
-		this.setIndex(0);
-		DFS_GrafoReverso(grafoReverso);
-	}
+		/******************Sacar**********************************/
+		/*for(int i = 0; i < this.listaDePost.size() ; i++){
+			System.out.println("Nodo numero: "+this.listaDePost.get(i));
+		}*/
+		/*********************************************************/
 
-	private void DFS_GrafoReverso(GrafoReverso grafoReverso) {
-		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
-			grafoReverso.componentesDelGrafoReverso()[i].setVisitado(NO_VISITADO);
-		}
+		System.out.println("");
+		System.out.println("");
+
 		System.out.println("Alumno: Leandro Alessandrello ");
 		System.out.println("Padron: 84155 ");
 		System.out.println("Alumno: Daniel Mugica ");
 		System.out.println("Padron: 87697 ");
+		System.out.println("");
+		System.out.println("");
 		System.out.println("Cantidad de modulos:  "+this.grafo.getCantidadDePaquetes());
-		System.out.println("Cantidad de Clases: ");
-		
-		while(this.getIndex() < this.listaDePost.size()){
-			NodoGrafo nodo = grafoReverso.componentesDelGrafoReverso()[this.listaDePost.get(index)];
-			if(!nodo.isVisitado()){		
-				this.ComponenteConexa.clear();
-				DFS_GrafoInversoVisitar(grafoReverso,nodo,0);
-				System.out.println("Componente: "+this.getComponente()+" ; Tamaño: "+this.ComponenteConexa.size());
-				this.setComponente(this.getComponente());/*Nombre de la componente */
-				this.setIndex(this.index+this.ComponenteConexa.size());
-				System.out.println("Ciclo: ");
-				if(this.ComponenteConexa.size()==1){
-					System.out.println("La componente conexa esta formada por un solo elemento "+ this.grafo.componentesDelGrafo()[this.ComponenteConexa.get(0).numeroPaquete()].getID());
-				}else{
-					Iterator<NodoComponenteConexa> it2 = this.ComponenteConexa.iterator();
-					while(it2.hasNext()){
-						NodoComponenteConexa inicial = it2.next();
-						NodoComponenteConexa finall;
-						if(it2.hasNext()){
-							finall = it2.next();
-							System.out.println(this.grafo.componentesDelGrafo()[inicial.numeroPaquete()].getID() +" >> "+this.grafo.componentesDelGrafo()[finall.numeroPaquete()].getID()+" (peso: "+finall.peso()+")");
-						}
-					}
-				}
+		System.out.println("Cantidad de Clases: "+grafo.getCantidadDeClases());
+		System.out.println("");
+		System.out.println("");
+		DFS_ComponentesConexas(grafoReverso);
+		calcularCiclos(grafoReverso); 
+
+	}
+	/*
+	 * Calcula los ciclos dentro de una compnente conexa, por eso utiliza el grafoReverso para 
+	 * poder obtener componentes conexas.
+	 */
+	private void calcularCiclos(GrafoReverso grafoReverso) {
+		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
+			grafoReverso.representacionGrafoReverso()[i].setVisitado(NO_VISITADO);
+		}	
+		while(this.listaDePost.size() > 0){
+			if(!grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].isVisitado()){
+				this.componentesConexas.clear();
+				this.Ciclo.clear();
+				this.Ciclo.add(new NodoCiclo(grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].getIDinterno(), 0));
+				calcularCiclosRecursivo(grafoReverso,grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()]);
+				actualizarVisitados(grafoReverso);
+				actualizarListaPost(grafoReverso);				
 			}
 		}
-		System.out.println("Termino Grafoooooooooo");
-		System.out.println("");
+
 	}
-	private void DFS_GrafoInversoVisitar(GrafoReverso grafoReverso,	NodoGrafo nodo,int peso) {		
-		nodo.setVisitado(VISITADO);
-		NodoComponenteConexa nodoA = new NodoComponenteConexa(nodo.getIDinterno(),peso);
-		this.ComponenteConexa.add(nodoA);
+
+	private void calcularCiclosRecursivo(GrafoReverso grafoReverso,NodoGrafo nodo) {
+		this.componentesConexas.add(nodo.getIDinterno());
 		Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
 		while(it.hasNext()){
 			NodoListaDeAdyacencia nodoAux = it.next();
-			if(!grafoReverso.componentesDelGrafoReverso()[nodoAux.getNumeroPaquete()].isVisitado()){
-				DFS_GrafoInversoVisitar(grafoReverso,grafoReverso.componentesDelGrafoReverso()[nodoAux.getNumeroPaquete()],nodoAux.getPeso());
+			if(!grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()].isVisitado()){
+				boolean encontrado = formaCiclo(nodoAux.getNumeroPaquete(),nodoAux.getPeso());
+				if(!encontrado){
+					/*******************Sacar********************************************/
+					//System.out.println(nodoAux.getPeso());
+					/********************************************************************/
+					Ciclo.add(new NodoCiclo(nodoAux.getNumeroPaquete(),nodoAux.getPeso()));
+					calcularCiclosRecursivo(grafoReverso,grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()]);
+				}
+			}
+		}
+	}
+
+	private boolean formaCiclo(int numeroPaquete,int peso) {
+		boolean encontrado = false;
+		/********************Sacar*******************************/
+		/*for(int j = 0; j < this.Ciclo.size() ; j++){
+			System.out.println(Ciclo.get(j).numeroPaquete());
+		}*/
+		/********************************************************/
+		for(int i = 0; i< this.Ciclo.size() && !encontrado ; i++){
+			if(Ciclo.get(i).numeroPaquete() == numeroPaquete){
+				encontrado = true;
+				imprimirCiclo(i,peso);
+				this.cantidadDeCiclos++;
+			}
+		}
+		return encontrado;		
+	}
+
+	private void imprimirCiclo(int i,int peso) {
+		int finall = this.Ciclo.size()-1;
+		System.out.println("");
+		System.out.println("Ciclo "+this.cantidadDeCiclos);
+		while(finall > i){
+			System.out.println(this.Ciclo.get(finall).numeroPaquete()+" >> "+this.Ciclo.get(finall-1).numeroPaquete()+" (Peso: "+this.Ciclo.get(finall).peso()+")");
+			finall--;
+		}	
+		finall = this.Ciclo.size()-1;
+		System.out.println(this.Ciclo.get(i).numeroPaquete()+" >> "+this.Ciclo.get(finall).numeroPaquete()+" (Peso: "+peso+")");
+	}
+
+	private void actualizarVisitados(GrafoReverso grafoReverso) {
+		for (int i = 0 ; i < this.componentesConexas.size() ; i++){
+			grafoReverso.representacionGrafoReverso()[this.componentesConexas.get(i)].setVisitado(VISITADO);
+		}	
+	}
+
+	private void DFS_ComponentesConexas(GrafoReverso grafoReverso) {
+		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
+			grafoReverso.representacionGrafoReverso()[i].setVisitado(NO_VISITADO);
+		}	
+		LinkedList<Integer> listaAux = (LinkedList<Integer>) this.listaDePost.clone();
+		while(this.listaDePost.size() > 0){
+			if(!grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].isVisitado()){
+				this.componentesConexas.clear();			
+				DFS_ComponentesConexasVisitar(grafoReverso,grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()]);
+				System.out.print("Componente: "+this.Componente+"; Tamaño: "+this.componentesConexas.size());
+				System.out.print(";  Sus componentes son: ");
+				for(int j=0 ; j < this.componentesConexas.size() ; j++){
+					System.out.print(this.grafo.componentesDelGrafo()[this.componentesConexas.get(j)].getID()+" ; ");
+				}
+				System.out.println("");
+				actualizarListaPost(grafoReverso);
+			}
+			this.setComponente(this.getComponente());				
+		}
+		this.listaDePost = listaAux;
+	}
+
+	void actualizarListaPost(GrafoReverso grafoReverso){
+		for (int i = 0, cant = 0; cant < this.componentesConexas.size() && i < this.listaDePost.size(); i++ ){
+			if(grafoReverso.representacionGrafoReverso()[listaDePost.get(i)].isVisitado()){
+				listaDePost.remove(i);
+				i--;
+				cant++; 
+				/*Lista de post tiene |v| elementos como maximo si la componente conexa es todo el grafo es todo el grafo*/
+			}
+		}
+	}
+
+	private void DFS_ComponentesConexasVisitar(GrafoReverso grafoReverso,NodoGrafo nodo) {
+		nodo.setVisitado(VISITADO);
+		this.componentesConexas.add(nodo.getIDinterno());
+		Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
+		while(it.hasNext()){
+			NodoListaDeAdyacencia nodoAux = it.next();
+			if(!grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()].isVisitado()){
+				DFS_ComponentesConexasVisitar(grafoReverso,grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()]);
 			}
 		}
 	}
@@ -146,18 +237,40 @@ public class Acoplamiento {
 		this.listaDePost.addFirst(nodoGrafo.getIDinterno());
 	}
 
-	private void setIndex(int index){
-		this.index = index;
-	}
-
-	private int getIndex(){
-		return this.index;
-	}
 	public void setComponente(char componente) {
 		Componente = (char) (componente+1);
 	}
 	public char getComponente() {
 		return Componente;
 	}
+	/************Sacar**********************************/
+	private void imprimirGrafoReverso(GrafoReverso grafoReverso){
+		System.out.println("");
+		System.out.println("GrafReverso");
+		for(int i =0 ; i<grafoReverso.representacionGrafoReverso().length;i++){
+			NodoGrafo nodo = grafoReverso.representacionGrafoReverso()[i];
+			System.out.println("Nombre Paquete :"+ nodo.getID());
+			System.out.println("Numero Paquete :"+ nodo.getIDinterno());
+			if(grafoReverso.representacionGrafoReverso()[i].getListaDeAdyacencia().isEmpty()){
+				System.out.println("Lista de adyacencia Vacia");
+				System.out.println("/----------------------------/  ");
+				System.out.println("");
+			}else{
+				System.out.println("Lista de adyacencia: ");
+				System.out.println("");
+				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
+				while(it.hasNext()){
+					NodoListaDeAdyacencia nodo2 = it.next();
+					System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
+					System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
+					System.out.println("Peso Paquete: "+nodo2.getPeso());
+					System.out.println(" ");
+				}
+				System.out.println("/----------------------------/  ");
+				System.out.println("");
+			}
+		}
+	}
+	/***************************************************/
 }
 
