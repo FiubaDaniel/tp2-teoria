@@ -16,12 +16,12 @@ public class MainPruebas {
 		acoplamiento.CalcularComponentesConexas();
 		System.out.println("");
 		System.out.println("");
-		System.out.println("Prueba 2 ");
+		/*System.out.println("Prueba 2 ");
 		//ruta = "Prueba2";
 		ruta = "/home/daniel/Caso1Grafo1Borrar";
 		grafo = new Grafo(ruta);
 		acoplamiento = new CalculadorAcoplamiento(grafo);
-		acoplamiento.CalcularComponentesConexas();
+		acoplamiento.CalcularComponentesConexas();*/
 	}
 		
 }
