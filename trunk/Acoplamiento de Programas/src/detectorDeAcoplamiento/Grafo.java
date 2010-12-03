@@ -17,7 +17,7 @@ public class Grafo {
 	private ArrayList<NodoClases> ListaClasesYBloques;
 	private Hashtable<String, Integer> Paquete;
 	private Hashtable<String, Integer> Clase;
-	private int cantidadDePaquetes;
+	private int cantidadDePaquetes,cantidadDeClases;
 	int tiempo = 0;
 
 	/* Constantes necesarias para el parseo del los archivos */
@@ -62,7 +62,6 @@ public class Grafo {
 		 * Ademas se obtiene la cantidad de paquetes existentes que permite crear el vector que representara al
 		 * grafo.
 		 */
-		System.out.println("Cantidad de Files :"+listaDeClases.length);
 		for(int j=0;j<listaDeClases.length;j++){
 			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
 			BufferedReader Clase ;
@@ -133,10 +132,9 @@ public class Grafo {
 				e.printStackTrace();
 			}
 		}
+		this.cantidadDeClases = this.Clase.size();
 		/****************************SACAR**************************************/
-		System.out.println("Grafooooooooooooooooo");
-		System.out.println("Cantidad de paquetes :"+this.cantidadDePaquetes);
-		System.out.println("Length: "+this.representacionGrafo.length);
+		/*System.out.println("Grafo");
 		for(int i =0 ; i<this.representacionGrafo.length;i++){
 			NodoGrafo nodo = this.representacionGrafo[i];
 			System.out.println("Nombre Paquete :"+ nodo.getID());
@@ -144,8 +142,10 @@ public class Grafo {
 			if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
 				System.out.println("Lista de adyacencia Vacia");
 				System.out.println("/----------------------------/  ");
+				System.out.println("");
 			}else{
 				System.out.println("Lista de adyacencia: ");
+				System.out.println("");
 				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
 				while(it.hasNext()){
 					NodoListaDeAdyacencia nodo2 = it.next();
@@ -154,8 +154,10 @@ public class Grafo {
 					System.out.println("Peso Paquete: "+nodo2.getPeso());
 					System.out.println(" ");
 				}
+				System.out.println("/----------------------------/  ");
+				System.out.println("");
 			}
-		}
+		}*/
 	}
 
 	private void agregarPaqueteImport(boolean encontrado) {
@@ -412,6 +414,10 @@ public class Grafo {
 
 	public int getCantidadDePaquetes(){
 		return this.cantidadDePaquetes;
+	}
+	
+	public int getCantidadDeClases(){
+		return this.cantidadDeClases;
 	}
 	/********************************Sacar***************************/
 	public void setClaseEnLaQestoy(String claseEnLaQestoy) {
