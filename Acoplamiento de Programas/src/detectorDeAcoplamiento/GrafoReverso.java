@@ -18,29 +18,9 @@ public class GrafoReverso {
 		}
 	}
 
-	/**
-	 * Calcula, dado un grafo, su reverso.
-	 * @param grafo
-	 */
 	public void calcularGrafoReverso(Grafo grafo){
 		
-		/*int tamanio = grafo.getCantidadDePaquetes();
-		NodoGrafo[] nodos = grafo.componentesDelGrafo();
-		GrafoReverso grafoReverso = new GrafoReverso(tamanio);
-		NodoGrafo[] nodoReverso = grafoReverso.getNodos();*/
-		
 		for(int i = 0; i < grafo.componentesDelGrafo().length; i++){  
-			/*ArrayList listaDeAdyacencia = nodos[i].getListaDeAdyacencia();
-			
-			if ( !listaDeAdyacencia.isEmpty()){
-				
-				for(int j = 0; j < listaDeAdyacencia.size(); j++){  //recorro la lista de adyacencia del nodo
-					Integer nodoAdyacente = (Integer)listaDeAdyacencia.get(j);
-					ArrayList listaDeAdyacenciaReversa = nodoReverso[nodoAdyacente].getListaDeAdyacencia();
-					listaDeAdyacenciaReversa.add(j);
-				}
-			}
-		}*/
 			/*Seteo el nombre del paquete */
 			this.representacionGrafoReverso[i].setID(grafo.componentesDelGrafo()[i].getID());
 			/*Ahora invierto el grafo, o sea sus listas de adyacencia*/
