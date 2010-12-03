@@ -13,7 +13,8 @@ public class MainPruebas {
 		Grafo grafo = new Grafo(ruta);
 		Acoplamiento acoplamiento = new Acoplamiento(grafo);
 		acoplamiento.CalcularComponentesConexas();
-		
+		System.out.println("");
+		System.out.println("");
 		System.out.println("Prueba 2 ");
 		ruta = "Prueba2";
 		grafo = new Grafo(ruta);
