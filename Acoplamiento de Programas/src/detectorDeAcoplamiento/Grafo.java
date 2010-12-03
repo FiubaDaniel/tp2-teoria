@@ -7,7 +7,6 @@ import java.io.FileReader;
 
 import java.io.IOException;
 import java.text.StringCharacterIterator;
-import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Iterator;
 
@@ -27,7 +26,7 @@ public class Grafo {
 	public static final String Package = "package";
 	public static final String Import = "import";
 	public static final String New = "new";
-	public static final String Class = "class"; 
+	public static final String Class = "class";
 
 	/*atributos especiales de parseo*/
 	private String nombrePaqueteActual; /* De los import */
@@ -54,109 +53,115 @@ public class Grafo {
 
 		File CarpetaClases = new File(ruta);
 		File listaDeClases[]= CarpetaClases.listFiles(); /* Lista de clases dentro de la carpeta pasada como ruta */
+
 		/*
-		 * Obtengo todos los paquetes que hay en el grafo, para crear el vector, o sea solo analizo packaged, 
-		 * import y class para armar la hashtable paquete / identificacion interna y la hashtable 
+		 * Obtengo todos los paquetes que hay en el grafo, para crear el vector, o sea solo analizo packaged,
+		 * import y class para armar la hashtable paquete / identificacion interna y la hashtable
 		 * paquete(identificacion interna) / clase.
 		 * Ademas se obtiene la cantidad de paquetes existentes que permite crear el vector que representara al
 		 * grafo.
 		 */
+
 		for(int j=0;j<listaDeClases.length;j++){
-			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
-			BufferedReader Clase ;
-			try {
-				Clase = new BufferedReader( new FileReader( archivoClase ) );
-				this.nombrePaqueteActual = ""; /* De los import */
-				this.nombrePaquete ="";
-				this.nombreClase = ""; /* De los import */
-				this.setEsClass(false);
-				String lineaEnProceso;
-				boolean encontrado = false;
-				while(Clase.ready() && !encontrado){
-					/* Primero obtengo paquete de la clase que examino*/
-					lineaEnProceso = Clase.readLine();
-					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
-					agregarPaquete(encontrado);
+			if(listaDeClases[j].getName().compareTo(".svn")!=0){
+				File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
+				BufferedReader Clase ;
+				try {
+					Clase = new BufferedReader( new FileReader( archivoClase ) );
+					this.nombrePaqueteActual = ""; /* De los import */
+					this.nombrePaquete ="";
+					this.nombreClase = ""; /* De los import */
+					this.setEsClass(false);
+					String lineaEnProceso;
+					boolean encontrado = false;
+					while(Clase.ready() && !encontrado){
+						/* Primero obtengo paquete de la clase que examino*/
+						lineaEnProceso = Clase.readLine();
+						encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
+						agregarPaquete(encontrado);
+					}
+					encontrado = false;
+					this.setEsClass(false);
+					while(Clase.ready() && !encontrado){
+						lineaEnProceso = Clase.readLine();
+						encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
+						encontrado = agregarClaseOImport(encontrado);
+					}
+					Clase.close();
+				}catch (IOException e) {
+					e.printStackTrace();
 				}
-				encontrado = false;
-				this.setEsClass(false);
-				while(Clase.ready() && !encontrado){
-					lineaEnProceso = Clase.readLine();
-					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
-					encontrado = agregarClaseOImport(encontrado);
-				}
-				Clase.close();
-			}catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		/*Ahora creo el grafo usando los datos recolectados mas el parseo total de los archivos */
 		this.representacionGrafo = new NodoGrafo[this.cantidadDePaquetes];
 		for(int j=0;j<listaDeClases.length;j++){
-			File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
-			BufferedReader Clase ;
-			try {
-				Clase = new BufferedReader( new FileReader( archivoClase ) );
-				this.nombreClase = "";
-				String lineaEnProceso;
-				boolean encontrado = false;
-				/*
-				 * Primero setea los valores del nodo y los paquetes de la lista de adyacencia.
-				 * 1-Creo nodo con numero de paquete (obtengo de hastable) y nombre de paquete (obtengo del archivo)
-				 */
-				while(Clase.ready() && !encontrado){
+			if(listaDeClases[j].getName().compareTo(".svn")!=0){
+				File archivoClase = new File(ruta+"/"+listaDeClases[j].getName());
+				BufferedReader Clase ;
+				try {
+					Clase = new BufferedReader( new FileReader( archivoClase ) );
 					this.nombreClase = "";
-					lineaEnProceso = Clase.readLine();
-					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
-					this.agregarNodoAlGrafo(encontrado);
+					String lineaEnProceso;
+					boolean encontrado = false;
+					/*
+					 * Primero setea los valores del nodo y los paquetes de la lista de adyacencia.
+					 * 1-Creo nodo con numero de paquete (obtengo de hastable) y nombre de paquete (obtengo del archivo)
+					 */
+					while(Clase.ready() && !encontrado){
+						this.nombreClase = "";
+						lineaEnProceso = Clase.readLine();
+						encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroPackage, Package, nombrePaqueteActual, nombreClase, esClass);
+						this.agregarNodoAlGrafo(encontrado);
+					}
+					encontrado = false;
+					/*Ahora vienen los import, pq lo que me determinan la lista de adyacencia.*/
+					this.setEsClass(false);
+					while(Clase.ready() && !encontrado){
+						this.nombreClase = "";
+						lineaEnProceso = Clase.readLine();
+						encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
+						agregarPaqueteImport(encontrado); /*Esto me garantiza agregar los paquetes q son de java, los cuales sus listas sera vacias */
+						encontrado = agregarElementoAListaDeAdyacencia(encontrado);
+					}
+					encontrado = false;
+					while(Clase.ready()){
+						this.nombreClase = "";
+						lineaEnProceso = Clase.readLine();
+						encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroNew, New, nombrePaquete, nombreClase, esClass);
+						agregarPeso(encontrado);
+					}
+				}catch (IOException e) {
+					e.printStackTrace();
 				}
-				encontrado = false;
-				/*Ahora vienen los import, pq lo que me determinan la lista de adyacencia.*/
-				this.setEsClass(false);
-				while(Clase.ready() && !encontrado){
-					this.nombreClase = "";
-					lineaEnProceso = Clase.readLine();
-					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroImport, Import, nombrePaquete, nombreClase, esClass);
-					agregarPaqueteImport(encontrado); /*Esto me garantiza agregar los paquetes q son de java, los cuales sus listas sera vacias */
-					encontrado = agregarElementoAListaDeAdyacencia(encontrado);
-				}
-				encontrado = false;
-				while(Clase.ready()){
-					this.nombreClase = "";
-					lineaEnProceso = Clase.readLine();
-					encontrado = this.obtenerPatronEnLineaX(lineaEnProceso, numeroNew, New, nombrePaquete, nombreClase, esClass);
-					agregarPeso(encontrado);
-				}
-			}catch (IOException e) {
-				e.printStackTrace();
 			}
 		}
 		this.cantidadDeClases = this.Clase.size();
 		/****************************SACAR**************************************/
 		/*System.out.println("Grafo");
-		for(int i =0 ; i<this.representacionGrafo.length;i++){
-			NodoGrafo nodo = this.representacionGrafo[i];
-			System.out.println("Nombre Paquete :"+ nodo.getID());
-			System.out.println("Numero Paquete :"+ nodo.getIDinterno());
-			if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
-				System.out.println("Lista de adyacencia Vacia");
-				System.out.println("/----------------------------/  ");
-				System.out.println("");
-			}else{
-				System.out.println("Lista de adyacencia: ");
-				System.out.println("");
-				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
-				while(it.hasNext()){
-					NodoListaDeAdyacencia nodo2 = it.next();
-					System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
-					System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
-					System.out.println("Peso Paquete: "+nodo2.getPeso());
-					System.out.println(" ");
-				}
-				System.out.println("/----------------------------/  ");
-				System.out.println("");
-			}
-		}*/
+                for(int i =0 ; i<this.representacionGrafo.length;i++){
+                        NodoGrafo nodo = this.representacionGrafo[i];
+                        System.out.println("Nombre Paquete :"+ nodo.getID());
+                        System.out.println("Numero Paquete :"+ nodo.getIDinterno());
+                        if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
+                                System.out.println("Lista de adyacencia Vacia");
+                                System.out.println("/----------------------------/  ");
+                                System.out.println("");
+                        }else{
+                                System.out.println("Lista de adyacencia: ");
+                                System.out.println("");
+                                Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
+                                while(it.hasNext()){
+                                        NodoListaDeAdyacencia nodo2 = it.next();
+                                        System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
+                                        System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
+                                        System.out.println("Peso Paquete: "+nodo2.getPeso());
+                                        System.out.println(" ");
+                                }
+                                System.out.println("/----------------------------/  ");
+                                System.out.println("");
+                        }
+                }*/
 	}
 
 	private void agregarPaqueteImport(boolean encontrado) {
@@ -166,7 +171,7 @@ public class Grafo {
 				NodoGrafo nodo = new NodoGrafo(this.nombrePaquete,numeroPaquete);
 				this.representacionGrafo[numeroPaquete] = nodo;
 			}
-		}	
+		}      
 	}
 
 	private void agregarPeso(boolean encontrado) {
@@ -175,7 +180,7 @@ public class Grafo {
 			int paqueteActual = this.Paquete.get(nombrePaqueteActual);
 			Iterator<NodoListaDeAdyacencia> it = this.representacionGrafo[paqueteActual].getListaDeAdyacencia().iterator();
 			boolean encontrado2 = false;
-			while(it.hasNext() && !encontrado2){			
+			while(it.hasNext() && !encontrado2){                    
 				NodoListaDeAdyacencia nodo = it.next();
 				if(nodo.getNumeroPaquete() == paqueteReferenciado){
 					encontrado2 = true;
@@ -203,7 +208,7 @@ public class Grafo {
 				this.representacionGrafo[numeroPaqueteActual].getListaDeAdyacencia().add(nodo);
 			}
 			return false;
-		}else if(esClass && encontrado){			
+		}else if(esClass && encontrado){                        
 			return true;
 		}
 		return false;
@@ -215,7 +220,7 @@ public class Grafo {
 			if(this.representacionGrafo[identificadorDePaquete] == null){
 				NodoGrafo nodo = new NodoGrafo(this.nombrePaqueteActual,identificadorDePaquete);
 				this.representacionGrafo[identificadorDePaquete] = nodo;
-			}	
+			}      
 		}
 	}
 
@@ -242,9 +247,9 @@ public class Grafo {
 			return false;
 		}else if(esClass && encontrado){/*Tengo el nombre de la clase*/
 			int numero = this.Paquete.get(nombrePaqueteActual);
-			this.Clase.put(nombreClase, numero);
-			this.setEsClass(false);
-			return true;
+		this.Clase.put(nombreClase, numero);
+		this.setEsClass(false);
+		return true;
 		}
 		return false;
 	}
@@ -255,8 +260,8 @@ public class Grafo {
 	 * correspondientes a la informacion que brinda ese patron en los parametros nombreClase, nombrePatron.
 	 * Si hubo algun error es devuelto en error que pasa como parametro.
 	 */
-	@SuppressWarnings("static-access")
-	private boolean obtenerPatronEnLineaX(String lineaLeida,int numeroPatron, String patron,String nombrePaquete,String nombreClase,boolean esClass){
+	 @SuppressWarnings("static-access")
+	 private boolean obtenerPatronEnLineaX(String lineaLeida,int numeroPatron, String patron,String nombrePaquete,String nombreClase,boolean esClass){
 		String ventana = "";
 		boolean encontrePatron = false;
 		int inicial = 0;
@@ -295,18 +300,13 @@ public class Grafo {
 				int cantidadDePuntos = 0;
 				boolean terminado = false;
 				while(caracter != iteradorDeLinea.DONE && !terminado){
-					if(caracter != iteradorDeLinea.DONE && caracter != ';'&& caracter != '.'){		
+					if(caracter != iteradorDeLinea.DONE && caracter != ';'&& caracter != '.'){              
 						if(cantidadDePuntos==0){
 							lineaAuxiliar1 = lineaAuxiliar1+caracter;
 						}else{
 							lineaAuxiliar2 = lineaAuxiliar2+caracter;
-						}				
-						/*else if(cantidadDePuntos == 1){
-							lineaAuxiliar2 = lineaAuxiliar2+caracter;
-						}else if(cantidadDePuntos==2 ){
-							this.setNombreClase(this.nombreClase + caracter);
-						}*/
-					}else if( caracter=='.' ){	
+						}                              
+					}else if( caracter=='.' ){      
 						if(cantidadDePuntos > 0){ /* Es el segundo punto */
 							lineaAuxiliar1 = lineaAuxiliar1+"."+lineaAuxiliar2;
 							lineaAuxiliar2 = "";
@@ -314,17 +314,10 @@ public class Grafo {
 						cantidadDePuntos++;
 
 					}
-					caracter = iteradorDeLinea.next();	
+					caracter = iteradorDeLinea.next();      
 				}
 				this.setNombreClase(lineaAuxiliar2);
-				this.setNombrePaquete(lineaAuxiliar1);
-				/*if(cantidadDePuntos==1){
-					this.setNombreClase(lineaAuxiliar2); /*LineaAxuliar2 es el nombre de la clase y lineaAuxiliar1 el del paquete*/
-				/*	this.setNombrePaquete(lineaAuxiliar1);
-				}else if(cantidadDePuntos==2){
-					this.setNombrePaquete(lineaAuxiliar1+'.'+lineaAuxiliar2); 
-					/*El paquete es la suma de las dos lineas auxiliares y el nombre de la clase esta en nombreClase*/
-				//}
+				this.setNombrePaquete(lineaAuxiliar1);             
 			}else if(numeroPatron == numeroClase){
 				this.setNombreClase("");
 				this.setEsClass(true);
@@ -340,10 +333,12 @@ public class Grafo {
 				this.setClaseEnLaQestoy(this.nombreClase);
 			}else if( numeroPatron == numeroPackage){
 				String lineaAuxiliar="";
-				while(caracter != iteradorDeLinea.DONE){
+				boolean encontradoAux = false;
+				while(caracter != iteradorDeLinea.DONE && !encontradoAux){
 					if(caracter != iteradorDeLinea.DONE&&caracter != ';'){
 						lineaAuxiliar = lineaAuxiliar + caracter.toString();
 					}
+					if(caracter == ';') encontradoAux = true;
 					caracter = iteradorDeLinea.next();
 				}
 				this.setNombrePaqueteActual(lineaAuxiliar);
@@ -362,65 +357,66 @@ public class Grafo {
 			encontrePatron = obtenerPatronEnLineaX(lineaLeida,numeroClase,Class,nombrePaquete,nombreClase,esClass);
 		}
 		return encontrePatron;
-	}
+	 }
 
-	@SuppressWarnings("static-access")
-	private void eliminarCaracteresEnBlanco(String linea) {
-		StringCharacterIterator iteradorDeLinea = new StringCharacterIterator(linea);
-		Character caracter = new Character(iteradorDeLinea.first());
-		while (caracter==' '&& caracter != iteradorDeLinea.DONE){
-			caracter = iteradorDeLinea.next();
-		}
-		String lineaAuxiliar="";
-		while(caracter != iteradorDeLinea.DONE){
-			if(caracter != iteradorDeLinea.DONE){
-				lineaAuxiliar = lineaAuxiliar + caracter.toString();
-			}
-			caracter = iteradorDeLinea.next();
-		}
-		linea = lineaAuxiliar;
-	}
+	 @SuppressWarnings("static-access")
+	 private void eliminarCaracteresEnBlanco(String linea) {
+		 StringCharacterIterator iteradorDeLinea = new StringCharacterIterator(linea);
+		 Character caracter = new Character(iteradorDeLinea.first());
+		 while (caracter==' '&& caracter != iteradorDeLinea.DONE){
+			 caracter = iteradorDeLinea.next();
+		 }
+		 String lineaAuxiliar="";
+		 while(caracter != iteradorDeLinea.DONE){
+			 if(caracter != iteradorDeLinea.DONE){
+				 lineaAuxiliar = lineaAuxiliar + caracter.toString();
+			 }
+			 caracter = iteradorDeLinea.next();
+		 }
+		 linea = lineaAuxiliar;
+	 }
 
-	void setNombrePaqueteActual(String parametro){
-		this.nombrePaqueteActual = parametro;
-	}
-	void setNombreClase(String parametro){
-		this.nombreClase = parametro;
-	}
-	void setNombrePaquete(String parametro){
-		this.nombrePaquete = parametro;
-	}
+	 void setNombrePaqueteActual(String parametro){
+		 this.nombrePaqueteActual = parametro;
+	 }
+	 void setNombreClase(String parametro){
+		 this.nombreClase = parametro;
+	 }
+	 void setNombrePaquete(String parametro){
+		 this.nombrePaquete = parametro;
+	 }
 
-	void setEsClass(boolean parametro){
-		this.esClass = parametro;
-	}
+	 void setEsClass(boolean parametro){
+		 this.esClass = parametro;
+	 }
 
-	public NodoGrafo [] componentesDelGrafo(){
-		return this.representacionGrafo;
-	}
+	 public NodoGrafo [] componentesDelGrafo(){
+		 return this.representacionGrafo;
+	 }
 
-	public int getTiempo(){
-		return this.tiempo;
-	}
+	 public int getTiempo(){
+		 return this.tiempo;
+	 }
 
-	public void setTiempo(int tiempo){
-		this.tiempo = tiempo;
-	}
+	 public void setTiempo(int tiempo){
+		 this.tiempo = tiempo;
+	 }
 
-	public int getCantidadDePaquetes(){
-		return this.cantidadDePaquetes;
-	}
-	
-	public int getCantidadDeClases(){
-		return this.cantidadDeClases;
-	}
-	/********************************Sacar***************************/
-	public void setClaseEnLaQestoy(String claseEnLaQestoy) {
-		ClaseEnLaQestoy = claseEnLaQestoy;
-	}
+	 public int getCantidadDePaquetes(){
+		 return this.cantidadDePaquetes;
+	 }
 
-	public String getClaseEnLaQestoy() {
-		return ClaseEnLaQestoy;
-	}
-	/******************************************************************/
+	 public int getCantidadDeClases(){
+		 return this.cantidadDeClases;
+	 }
+	 /********************************Sacar***************************/
+	 public void setClaseEnLaQestoy(String claseEnLaQestoy) {
+		 ClaseEnLaQestoy = claseEnLaQestoy;
+	 }
+
+	 public String getClaseEnLaQestoy() {
+		 return ClaseEnLaQestoy;
+	 }
+	 /******************************************************************/
 }
+
