@@ -14,7 +14,6 @@ import java.util.Iterator;
 public class Grafo {
 
 	private NodoGrafo [] representacionGrafo;
-	private ArrayList<NodoClases> ListaClasesYBloques;
 	private Hashtable<String, Integer> Paquete;
 	private Hashtable<String, Integer> Clase;
 	private int cantidadDePaquetes,cantidadDeClases;
@@ -398,10 +397,6 @@ public class Grafo {
 
 	public NodoGrafo [] componentesDelGrafo(){
 		return this.representacionGrafo;
-	}
-
-	public ArrayList<NodoClases> getListaClasesYBloques(){
-		return this.ListaClasesYBloques;
 	}
 
 	public int getTiempo(){
