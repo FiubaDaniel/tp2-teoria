@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="iso-8859-1" ?> 
+<project name="Acoplamiento de Programas" default="ayuda" basedir=".">
+<property name="build.dir" value="bin/" /> 
+<property name="src.dir" value="src/" /> 
+<target name="limpiar">
+  <delete dir="${build.dir}" /> 
+  </target>
+<target name="compilar" depends="limpiar">
+  <mkdir dir="${build.dir}" /> 
+  <javac srcdir="${src.dir}" classpath="${lib.dir}" destdir="${build.dir}" /> 
+</target>
+<target name="correr" depends="compilar">
+<java fork="yes" classname="prubeas.MainPruebas">
+<classpath>
+<pathelement path="${build.dir}" />
+  </classpath>
+  </java>
+  </target>
+<target name="ayuda">
+  <echo>ant compilar : compila el programa</echo> 
+  <echo>ant correr : compila el programa y ejecuta el programa</echo> 
+  </target>
+  </project>
