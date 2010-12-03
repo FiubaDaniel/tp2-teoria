@@ -10,7 +10,7 @@
   <javac srcdir="${src.dir}" classpath="${lib.dir}" destdir="${build.dir}" /> 
 </target>
 <target name="correr" depends="compilar">
-<java fork="yes" classname="prubeas.MainPruebas">
+<java fork="yes" classname="pruebas.MainPruebas">
 <classpath>
 <pathelement path="${build.dir}" />
   </classpath>
