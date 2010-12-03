@@ -42,11 +42,6 @@ public class CalculadorAcoplamiento {
 		 * La idea seria agarra el primer elemento de la lista, encontrar la componente conexa y despues eliminar la cantidad
 		 * de elementos de la componente de la lista.
 		 */
-		/******************Sacar**********************************/
-		/*for(int i = 0; i < this.listaDePost.size() ; i++){
-                        System.out.println("Nodo numero: "+this.listaDePost.get(i));
-                }*/
-		/*********************************************************/
 
 		System.out.println("");
 		System.out.println("");
@@ -70,10 +65,6 @@ public class CalculadorAcoplamiento {
 	 * poder obtener componentes conexas.
 	 */
 	private void calcularCiclos(GrafoReverso grafoReverso) {
-		/*System.out.print("Lista de Post compConex ");
-		for(int j = 0; j < this.listaDePost.size() ; j++){
-            System.out.print(this.listaDePost.get(j));
-		}*/
 		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
 			grafoReverso.representacionGrafoReverso()[i].setVisitado(NO_VISITADO);
 		}       
@@ -81,7 +72,7 @@ public class CalculadorAcoplamiento {
 			if(!grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].isVisitado()){
 				this.componentesConexas.clear();
 				this.Ciclo.clear();
-				this.Ciclo.add(new NodoCiclo(grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].getIDinterno(), 0));
+				this.Ciclo.add(new NodoCiclo(grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].getIDinterno(),grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()].getID(), 0));
 				calcularCiclosRecursivo(grafoReverso,grafoReverso.representacionGrafoReverso()[this.listaDePost.getFirst()]);
 				actualizarVisitados(grafoReverso);
 				actualizarListaPost(grafoReverso);                              
@@ -98,10 +89,7 @@ public class CalculadorAcoplamiento {
 			if(!grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()].isVisitado()){
 				boolean encontrado = formaCiclo(nodoAux.getNumeroPaquete(),nodoAux.getPeso());
 				if(!encontrado){
-					/*******************Sacar********************************************/
-					//System.out.println(nodoAux.getPeso());
-					/********************************************************************/
-					Ciclo.add(new NodoCiclo(nodoAux.getNumeroPaquete(),nodoAux.getPeso()));
+					Ciclo.add(new NodoCiclo(nodoAux.getNumeroPaquete(),nodoAux.getNombrePaquete(),nodoAux.getPeso()));
 					calcularCiclosRecursivo(grafoReverso,grafoReverso.representacionGrafoReverso()[nodoAux.getNumeroPaquete()]);
 				}
 			}
@@ -122,11 +110,6 @@ public class CalculadorAcoplamiento {
 
 	private boolean formaCiclo(int numeroPaquete,int peso) {
 		boolean encontrado = false;
-		/********************Sacar*******************************/
-		/*for(int j = 0; j < this.Ciclo.size() ; j++){
-                        System.out.println(Ciclo.get(j).numeroPaquete());
-                }*/
-		/********************************************************/
 		for(int i = 0; i< this.Ciclo.size() && !encontrado ; i++){
 			if(Ciclo.get(i).numeroPaquete() == numeroPaquete){
 				encontrado = true;
@@ -142,11 +125,11 @@ public class CalculadorAcoplamiento {
 		System.out.println("");
 		System.out.println("Ciclo "+this.cantidadDeCiclos);
 		while(finall > i){
-			System.out.println(this.Ciclo.get(finall).numeroPaquete()+" >> "+this.Ciclo.get(finall-1).numeroPaquete()+" (Peso: "+this.Ciclo.get(finall).peso()+")");
+			System.out.println(this.Ciclo.get(finall).getNombre()+" >> "+this.Ciclo.get(finall-1).getNombre()+" (Peso: "+this.Ciclo.get(finall).peso()+")");
 			finall--;
 		}       
 		finall = this.Ciclo.size()-1;
-		System.out.println(this.Ciclo.get(i).numeroPaquete()+" >> "+this.Ciclo.get(finall).numeroPaquete()+" (Peso: "+peso+")");
+		System.out.println(this.Ciclo.get(i).getNombre()+" >> "+this.Ciclo.get(finall).getNombre()+" (Peso: "+peso+")");
 	}
 
 	private void actualizarVisitados(GrafoReverso grafoReverso) {
@@ -156,10 +139,6 @@ public class CalculadorAcoplamiento {
 	}
 
 	private void DFS_ComponentesConexas(GrafoReverso grafoReverso) {
-		/*System.out.print("Lista de Post compConex ");
-		for(int j = 0; j < this.listaDePost.size() ; j++){
-            System.out.print(this.listaDePost.get(j));
-		}*/
 		for(int i = 0 ; i < this.grafo.componentesDelGrafo().length ; i++){
 			grafoReverso.representacionGrafoReverso()[i].setVisitado(NO_VISITADO);
 		}       
@@ -262,33 +241,4 @@ public class CalculadorAcoplamiento {
 	public char getComponente() {
 		return Componente;
 	}
-	/************Sacar**********************************/
-	private void imprimirGrafoReverso(GrafoReverso grafoReverso){
-		System.out.println("");
-		System.out.println("GrafReverso");
-		for(int i =0 ; i<grafoReverso.representacionGrafoReverso().length;i++){
-			NodoGrafo nodo = grafoReverso.representacionGrafoReverso()[i];
-			System.out.println("Nombre Paquete :"+ nodo.getID());
-			System.out.println("Numero Paquete :"+ nodo.getIDinterno());
-			if(grafoReverso.representacionGrafoReverso()[i].getListaDeAdyacencia().isEmpty()){
-				System.out.println("Lista de adyacencia Vacia");
-				System.out.println("/----------------------------/  ");
-				System.out.println("");
-			}else{
-				System.out.println("Lista de adyacencia: ");
-				System.out.println("");
-				Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
-				while(it.hasNext()){
-					NodoListaDeAdyacencia nodo2 = it.next();
-					System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
-					System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
-					System.out.println("Peso Paquete: "+nodo2.getPeso());
-					System.out.println(" ");
-				}
-				System.out.println("/----------------------------/  ");
-				System.out.println("");
-			}
-		}
-	}
-	/***************************************************/
 }

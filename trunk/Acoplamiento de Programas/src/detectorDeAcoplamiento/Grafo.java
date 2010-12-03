@@ -34,13 +34,7 @@ public class Grafo {
         private String nombreClase;
         private boolean esClass;
 
-        /**
-         * Sacar es para buscar errores
-         */
-        /**********************************/
-        private String ClaseEnLaQestoy;
-        /**********************************/
-        /**
+        /*
          * La aplicacion debe recibir como parametro la ruta a un directorio donde se encontran los archivos a procesar,
          * o sea los archivos correspondientes a cada una de las clases.
          * ruta de los archivos
@@ -137,31 +131,6 @@ public class Grafo {
                         }
               }
                 this.cantidadDeClases = this.Clase.size();
-                /****************************SACAR**************************************/
-                System.out.println("Grafo");
-                for(int i =0 ; i<this.representacionGrafo.length;i++){
-                        NodoGrafo nodo = this.representacionGrafo[i];
-                        System.out.println("Nombre Paquete :"+ nodo.getID());
-                        System.out.println("Numero Paquete :"+ nodo.getIDinterno());
-                        if(this.representacionGrafo[i].getListaDeAdyacencia().isEmpty()){
-                                System.out.println("Lista de adyacencia Vacia");
-                                System.out.println("/----------------------------/  ");
-                                System.out.println("");
-                        }else{
-                                System.out.println("Lista de adyacencia: ");
-                                System.out.println("");
-                                Iterator<NodoListaDeAdyacencia> it = nodo.getListaDeAdyacencia().iterator();
-                                while(it.hasNext()){
-                                        NodoListaDeAdyacencia nodo2 = it.next();
-                                        System.out.println("Nombre Paquete: "+nodo2.getNombrePaquete());
-                                        System.out.println("Numero Paquete: "+nodo2.getNumeroPaquete());
-                                        System.out.println("Peso Paquete: "+nodo2.getPeso());
-                                        System.out.println(" ");
-                                }
-                                System.out.println("/----------------------------/  ");
-                                System.out.println("");
-                        }
-                }
         }
 
         private void agregarPaqueteImport(boolean encontrado) {
@@ -330,7 +299,7 @@ public class Grafo {
                                         }
                                         caracter = iteradorDeLinea.next();
                                 }
-                                this.setClaseEnLaQestoy(this.nombreClase);
+                        
                         }else if( numeroPatron == numeroPackage){
                                 String lineaAuxiliar="";
                                 boolean encontradoAux = false;
@@ -409,14 +378,5 @@ public class Grafo {
          public int getCantidadDeClases(){
                  return this.cantidadDeClases;
          }
-         /********************************Sacar***************************/
-         public void setClaseEnLaQestoy(String claseEnLaQestoy) {
-                 ClaseEnLaQestoy = claseEnLaQestoy;
-         }
-
-         public String getClaseEnLaQestoy() {
-                 return ClaseEnLaQestoy;
-         }
-         /******************************************************************/
 }
 
